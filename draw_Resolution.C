@@ -1,4 +1,5 @@
 void draw_Resolution(){
+
     gROOT->Macro("~/rootlogon.C");
     gStyle->SetOptStat(1);
     //gStyle->SetOptTitle(0);
