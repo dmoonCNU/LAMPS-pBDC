@@ -38,8 +38,8 @@ const bool XTrack = true;
 const bool YTrack = true;
 const bool fulltracking = true;
 const bool getresolution = false;
-const bool savepng = true; 
-//const bool savepng = false;
+//const bool savepng = true; 
+const bool savepng = false;
 
 const bool nodrawcan = true;
 // define the parametric line equation
@@ -440,7 +440,7 @@ void bdcTrackFinderData_getResolution_v15()
 
 
 
-  maxevt = 100;
+  //maxevt = 100;
   for(int ievt = 0; ievt < maxevt; ievt++){
     myTree->GetEntry(ievt);  
     ds1[ievt]=dur_sec1;
