@@ -458,13 +458,6 @@ void bdcTrackFinderData_CNU_Cosmic_getResolution_v16()
 
 
   //maxevt = 100;
-  for(int ievt = 0; ievt < maxevt; ievt++){
-    myTree->GetEntry(ievt);  
-    ds1[ievt]=dur_sec1;
-    ds2[ievt]=dur_sec2;
-    ds3[ievt]=dur_sec3;
-    ds4[ievt]=dur_sec4;
-  }
   int eventCnt = 0;
   int eventChk = 0;
   int ievtpre=0;
