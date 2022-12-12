@@ -1,0 +1,13 @@
+1. root -l -q -b bdcOrgTimeDist_Data_v15.C
+2. root -l anaTimeZero.C (to get time zero)
+3. input time zero into bdcTimeDist_Data_v15.C
+4. root -l -q -b bdcTimeDist_Data_v15.C
+5. input time zero into bdcTrackTreeMaker_Data_v15.C
+6. root -l -q -b bdcTrackTreeMaker_Data_v15.C
+7. root -l -q -b bdcTrackFinderData_CNU_Cosmic_getResolution_v10.C
+
+#### Analysis ####
+1. Correlation : anaCorr.C
+2. Time distribution : anaTime.C
+3. Angle distribution : anaAngle.C
+4. Resolution : draw_Resolution.C
