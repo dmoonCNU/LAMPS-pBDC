@@ -1,0 +1,15 @@
+This code works in geant4 11 for Mac
+
+How to run code
+
+mkdir build
+cd build
+cmake ../
+make
+
+./example
+
+/run/beamOn 100
+
+root -l drawplot.C
+
