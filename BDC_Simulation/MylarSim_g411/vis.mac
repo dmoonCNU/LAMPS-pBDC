@@ -41,5 +41,6 @@
 /vis/viewer/set/autoRefresh true
 
 /vis/scene/add/axes
+/vis/scene/add/scale   # Simple scale line
 
 /vis/verbose warnings
