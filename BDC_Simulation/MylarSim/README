@@ -1,3 +1,5 @@
+This code works in geant4 10
+
 How to run code
 
 mkdir build
@@ -6,3 +8,8 @@ cmake ../
 make
 
 ./example
+
+/run/beamOn 100
+
+root -l drawplot.C
+
