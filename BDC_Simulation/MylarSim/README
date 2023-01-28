@@ -1,0 +1,8 @@
+How to run code
+
+mkdir build
+cd build
+cmake ../
+make
+
+./example
