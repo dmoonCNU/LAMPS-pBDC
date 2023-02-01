@@ -66,7 +66,8 @@ G4VPhysicalVolume* OTDetectorConstruction::Construct()
   // -----------------------------------------------------
   // Detector
 
-  G4Material* detector_mat = nist -> FindOrBuildMaterial("G4_WATER");
+  G4Material* detector_mat = nist -> FindOrBuildMaterial("G4_MYLAR");
+  //G4Material* detector_mat = nist -> FindOrBuildMaterial("G4_WATER");
   G4double detector_size = 20*mm;
   G4double detector_offset_z = 30*mm;
 
