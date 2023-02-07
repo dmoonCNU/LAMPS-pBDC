@@ -1,0 +1,9 @@
+How to run files
+
+mkdir build
+cd build
+cmake ../
+make
+
+./generate
+
