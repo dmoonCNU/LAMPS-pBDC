@@ -65,14 +65,14 @@ int main(int argc, char * argv[]) {
   cmp.SetMedium(&gas);
   
   // Wire radius [cm]
-  const double rWireS = 20.e-6;
-  const double rWireP = 80.e-6;
+  const double rWireS = 0.002; //20.e-5; //20.e-6;
+  const double rWireP = 0.008; //80.e-5; //80.e-6;
   // Outer radius of the tube [cm]
   const double wdrift = 0.25;
   //const double wdrift = 20.e-3;
   // Voltages
-  const double vWire = -1400.;
-  const double vPlane = -1400.;
+  const double vWire = -1350.;
+  const double vPlane = -1350; //-1350.;
   // Add the signal wire in the centre.
   cmp.AddWire(0, 0, 2 * rWireS, 0, "sw");
   // Add the potential wire 
@@ -82,12 +82,12 @@ int main(int argc, char * argv[]) {
   cmp.AddPlaneY(wdrift,vPlane,"pp");
   cmp.AddPlaneY(-wdrift,vPlane,"np");
   // Request calculation of the weighting field. 
-  cmp.AddReadout("s");
+  cmp.AddReadout("sw");
  
   // Make a sensor.
   Sensor sensor;
   sensor.AddComponent(&cmp);
-  sensor.AddElectrode(&cmp, "s");
+  sensor.AddElectrode(&cmp, "sw");
   
   // Set the signal time window.
   const double tstep = 0.5;
@@ -131,9 +131,9 @@ int main(int argc, char * argv[]) {
   
   TCanvas* cS = nullptr;
   ViewSignal signalView;
-  constexpr bool plotSignal = false; //true;
+  constexpr bool plotSignal = true; //false; //true;
   if (plotSignal) {
-    cS = new TCanvas("cS", "", 600, 600);
+    cS = new TCanvas("cS", "", 604,0,576,600);
     signalView.SetCanvas(cS);
     signalView.SetSensor(&sensor);
     signalView.SetLabelY("signal [fC]");
@@ -182,8 +182,8 @@ int main(int argc, char * argv[]) {
     }
     sensor.ConvoluteSignals();
     int nt = 0;
-    if (!sensor.ComputeThresholdCrossings(-2., "s", nt)) continue;
-    if (plotSignal) signalView.PlotSignal("s");
+    if (!sensor.ComputeThresholdCrossings(-2., "sw", nt)) continue;
+    if (plotSignal) signalView.PlotSignal("sw");
   }
   /*
   //isoView.DriftElectrons(true);
