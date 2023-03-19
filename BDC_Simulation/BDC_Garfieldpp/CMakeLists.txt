@@ -9,6 +9,9 @@ endif()
 add_executable(bdc_DriftLine bdc_DriftLine.C)
 target_link_libraries(bdc_DriftLine Garfield::Garfield)
 
+add_executable(bdc_DriftLine2 bdc_DriftLine2.C)
+target_link_libraries(bdc_DriftLine2 Garfield::Garfield)
+
 add_executable(map_fieldMap_BDC map_fieldMap_BDC.C)
 target_link_libraries(map_fieldMap_BDC Garfield::Garfield)
 
