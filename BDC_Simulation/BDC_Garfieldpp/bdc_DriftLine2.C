@@ -56,9 +56,10 @@ int main(int argc, char * argv[]) {
   TApplication app("app", &argc, argv);
   // MC setup
   bool avalOn = true; // avalanche mode on
-  bool singleEvt = true; // run single event
+  bool singleEvt = false; //true; // run single event
+  bool log_ = false;
   double vMax = -1400;
-  int nTrk = 10;
+  int nTrk = 1000;
  
   // Make a gas medium.
   MediumMagboltz gas;
@@ -186,6 +187,7 @@ int main(int argc, char * argv[]) {
     gRandom -> SetSeed(time(0));
     rx = gRandom->Uniform(0.02, 0.25);
     hElecPosX->Fill(rx);
+    if(log_) cout<<"dhmoon "<<j<<"-th event, randome x : "<<rx<<endl;
     cout<<"dhmoon "<<j<<"-th event, randome x : "<<rx<<endl;
     //track.NewTrack(0.15, -0.25, 0, 0, 0, 1, 0); // track with traveling to y-axis starting at position of random x, -0.25 
     track.NewTrack(rx, 0.25, 0, 0, 0, -1, 0); // track with traveling to y-axis starting at position of random x, -0.25 
@@ -206,10 +208,10 @@ int main(int argc, char * argv[]) {
         track.GetElectron(k, xe, ye, ze, te, ee, dx, dy, dz);
         drift.DriftElectron(xe, ye, ze, te);
         double dxe2 = 0., dye2 = 0., dze2 = 0., dte2 = 0.;
-        drift.GetDriftLinePoint(nc, dxe2, dye2, dze2, dte2);
-        cout<<"dhMoon test :: dxe : "<<dxe2<<", dye : "<<dye2<<", dze : "<<dze2<<", dte : "<<dte2<<endl;
+        //drift.GetDriftLinePoint(nc, dxe2, dye2, dze2, dte2);
+        //cout<<"dhMoon test :: dxe : "<<dxe2<<", dye : "<<dye2<<", dze : "<<dze2<<", dte : "<<dte2<<endl;
         //drift.GetDriftLinePoint(const int i, double& x, double& y, double& z, double& t);
-        cout<<"test : "<<drift.GetNumberOfDriftLinePoints()<<endl;
+        //cout<<"test : "<<drift.GetNumberOfDriftLinePoints()<<endl;
         //int lpt =  GetNumberOfDriftLinePoints();
         //cout<<"number of drift line : "<<lpt<<endl;
         double x0, y0, z0, t0, e0;
@@ -217,11 +219,11 @@ int main(int argc, char * argv[]) {
         int status = 0;
         //int status = 0;
         drift.GetEndPoint(x1, y1, z1, t1, status);
-        cout<<"dhMoon drift line :: x1 : "<<x1<<", y1 : "<<y1<<", z1 : "<<z1<<", t1 : "<<t1<<", status : "<<status<<endl;
+        if(log_) cout<<"dhMoon drift line :: x1 : "<<x1<<", y1 : "<<y1<<", z1 : "<<z1<<", t1 : "<<t1<<", status : "<<status<<endl;
         if(avalOn) aval.AvalancheElectron(xe, ye, ze, te, 0.1, dxe, dye, dze);
         //int status;
         if(avalOn) aval.GetElectronEndpoint(0, x0, y0, z0, t0, e0, x1, y1, z1, t1, e1, status);
-        cout<<"t0 : "<<t0<<", t1 : "<<t1<<", te : "<<te<<", tc : "<<tc<<", drift time : "<<t1-tc<<endl;
+        if(log_) cout<<"t0 : "<<t0<<", t1 : "<<t1<<", te : "<<te<<", tc : "<<tc<<", drift time : "<<t1-tc<<endl;
 
         //dts = t1-tc;
         //hTime->Fill(dts);
@@ -240,17 +242,17 @@ int main(int argc, char * argv[]) {
     for(int i = 1; i < hTime->GetNbinsX(); i++){ 
       //cout<<hTime->GetBinContent(i)<<endl; 
       if(hTime->GetBinContent(i) > 0){
-        cout<<"No Zero bin : "<<i<<endl; 
+        if(log_) cout<<"No Zero bin : "<<i<<endl; 
         dtxmin = i;
         break;
       }
     }
-    cout<<"dhmoon Drift time : "<<drtime<<", drift velocity : "<<rx/dtxmin*10000<<endl;
+    if(log_) cout<<"dhmoon Drift time : "<<drtime<<", drift velocity : "<<rx/dtxmin*10000<<endl;
     hRTFunc->Fill(dtxmin,rx*10);
     //cout<<"dhmoon Drift time : "<<drtime<<", min bin : "<<dtmin<<", min x bin : "<<dtxmin<<endl;
     hDrTime->Fill(dtxmin);
     hDrVel->Fill(rx/dtxmin*10000);
-    cout<<"dhmoon Number of primary electrons : "<<ne<<endl;
+    if(log_) cout<<"dhmoon Number of primary electrons : "<<ne<<endl;
     hPrElec->Fill(ne);
     if (plotDrift) {
       //cD->Clear();
@@ -264,6 +266,8 @@ int main(int argc, char * argv[]) {
     int nt = 0;
     if (!sensor.ComputeThresholdCrossings(-2., "sw", nt)) continue;
     if (plotSignal) signalView.PlotSignal("sw");
+    //cD->SaveAs("plot_muon_drift.png");
+    //cS->SaveAs("plot_signal.png");
   }
 
   TFile *out = new TFile("out_sim_muon.root","RECREATE");
