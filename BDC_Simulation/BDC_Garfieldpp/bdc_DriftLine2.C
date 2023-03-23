@@ -187,8 +187,8 @@ int main(int argc, char * argv[]) {
     gRandom -> SetSeed(time(0));
     rx = gRandom->Uniform(0.02, 0.25);
     hElecPosX->Fill(rx);
-    if(log_) cout<<"dhmoon "<<j<<"-th event, randome x : "<<rx<<endl;
-    cout<<"dhmoon "<<j<<"-th event, randome x : "<<rx<<endl;
+    if(log_) cout<<"dhmoon "<<j<<"-th event, random x : "<<rx<<endl;
+    cout<<"dhmoon "<<j<<"-th event, random x : "<<rx<<endl;
     //track.NewTrack(0.15, -0.25, 0, 0, 0, 1, 0); // track with traveling to y-axis starting at position of random x, -0.25 
     track.NewTrack(rx, 0.25, 0, 0, 0, -1, 0); // track with traveling to y-axis starting at position of random x, -0.25 
     //track.NewTrack(rx, -0.25, 0, 0, 0, 1, 0); // track with traveling to y-axis starting at position of random x, -0.25 
