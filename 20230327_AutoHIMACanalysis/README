@@ -1,3 +1,9 @@
+For automatic codes,
+./autoHIMACCarbon3067v2.sh (for specific run)
+./autoHIMACCarbonall.sh (for all Carbon runs)
+
+Basically framework of tracking and analysis codes are followed.
+
 1. root -l -q -b bdcOrgTimeDist_Data_v15.C
 2. root -l anaTimeZero.C (to get time zero)
 3. input time zero into bdcTimeDist_Data_v15.C
