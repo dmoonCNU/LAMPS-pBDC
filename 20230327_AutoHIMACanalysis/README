@@ -1,5 +1,5 @@
 For automatic codes,
-./autoHIMACCarbon3067v2.sh (for specific run)
+./autoHIMACCarbon.sh (for specific run)
 ./autoHIMACCarbonall.sh (for all Carbon runs)
 
 Basically framework of tracking and analysis codes are followed.
