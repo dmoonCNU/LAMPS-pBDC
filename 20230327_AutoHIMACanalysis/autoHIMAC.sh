@@ -1,4 +1,4 @@
 #!/bin/bash
 
 ./autoHIMACCarbon.sh >& log_autoHIMACCarbon
-./autoHIMACProton.sh >& log_autoHIMACProton
+#./autoHIMACProton.sh >& log_autoHIMACProton

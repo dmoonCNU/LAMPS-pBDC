@@ -21,15 +21,14 @@ using namespace std;
 
 const bool MAXQDC = false; 
 
-//void bdcOrgTimeDist_Data_v16_ori(TString loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data", int minip=-1, int maxip=10, TString rmk="3067"){
-//void bdcOrgTimeDist_Data_v16_ori(TString loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data", int minip=-1, int maxip=10, string rmk="3067"){
-//void bdcOrgTimeDist_Data_v16_ori(TString loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data", int minip=-1, int maxip=10, int RunNumber=3067){
-void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int runopt=1, int RunNumber=3067){
+//###void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int runopt=1, int RunNumber=3067){
+void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int RunNumber=3067){
 
-	TString loca;
-	if (locano==1) loca="~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data"; 
-	else if (locano==2) loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data"; 
-
+	
+	   TString loca;
+	   if (locano==1) loca="~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data"; 
+	   else if (locano==2) loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data"; 
+	 
 
 	//int RunNumber = stoi(rmk);
 	std::cout << RunNumber << std::endl;
@@ -91,7 +90,7 @@ void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int r
 	itr4->SetBranchAddress("Data"      ,Data4       );
 
 	int minevt = 0;
-/*
+	/*
 	//	int minip = 0;
 	//	int maxip = 10;
 	//Carbon 200 MeV
@@ -105,7 +104,7 @@ void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int r
 	//default
 	minip=-1;
 	maxip=10;
-*/
+	 */
 	double QDCCUT1 = 370; //300;
 	double QDCCUT2 = 290; //300;
 	double QDCCUT3 = 320; //300;
@@ -186,22 +185,22 @@ void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int r
 	TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;time;Hit",400,1800,2200);
 	TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;time;Hit",400,1800,2200);
 
-/*
-	TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;time;Hit",32768,0,32768);
-	TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;time;Hit",32768,0,32768);
-	TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;time;Hit",32768,0,32768);
-	TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;time;Hit",32768,0,32768);
+	/*
+	   TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;time;Hit",32768,0,32768);
+	   TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;time;Hit",32768,0,32768);
+	   TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;time;Hit",32768,0,32768);
+	   TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;time;Hit",32768,0,32768);
 
-	TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;time;Hit",32768,0,32768);
-	TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;time;Hit",32768,0,32768);
-	TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;time;Hit",32768,0,32768);
-	TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;time;Hit",32768,0,32768);
+	   TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;time;Hit",32768,0,32768);
+	   TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;time;Hit",32768,0,32768);
+	   TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;time;Hit",32768,0,32768);
+	   TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;time;Hit",32768,0,32768);
 
-	TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;time;Hit",32768,0,32768);
-	TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;time;Hit",32768,0,32768);
-	TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;time;Hit",32768,0,32768);
-	TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;time;Hit",32768,0,32768);
-*/
+	   TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;time;Hit",32768,0,32768);
+	   TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;time;Hit",32768,0,32768);
+	   TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;time;Hit",32768,0,32768);
+	   TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;time;Hit",32768,0,32768);
+	 */
 
 	int maxevt = itr4->GetEntries();
 
@@ -325,9 +324,10 @@ void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int r
 						+ ((trigTime1 & 0x007F ) << 8 );
 
 					if (tmpQDC > QDCCUT1){
-						//double time = (ftt1-(Data1[ip*128+64+ich]&0x7FFF));
-						double time = 4000+(-ftt1+(Data1[ip*128+64+ich]&0x7FFF));
-						if (time<0) time+=32768;
+				                        double time = 4000+(-ftt1+(Data1[ip*128+64+ich]&0x7FFF));
+                        if ((time-4000)>0) time-=32768;
+                        if (tdopt==2) {time = (ftt1-(Data1[ip*128+64+ich]&0x7FFF));
+                        if (time<0) time+=32768;}
 						if(ich < 32 ) { 
 							if(Data1[ip*128+64+ich] > 0) {
 								firedch1_1[cnt1_1] = ich;
@@ -386,6 +386,7 @@ void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int r
 					if (tmpQDC > QDCCUT2){
 						//double time = (ftt2 - (Data2[ip*128+64+ich]&0x7FFF));
 						double time = 4000+(-ftt2+(Data2[ip*128+64+ich]&0x7FFF));
+						//if (runopt==4) time = (ftt2 - (Data2[ip*128+64+ich]&0x7FFF));
 						//double time = Data2[ip*128+64+ich]&0x7FFF;
 						if (time<0) time+=32768;
 						if(ich < 32) { 
@@ -443,10 +444,10 @@ void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int r
 						+ ((trigTime3 & 0x007F ) << 8 );
 
 					if (tmpQDC > QDCCUT3){
-						//double time = (ftt3 - (Data3[ip*128+64+ich]&0x7FFF));
-						double time = 4000+(-ftt3+(Data3[ip*128+64+ich]&0x7FFF));
-						//double time = Data3[ip*128+64+ich]&0x7FFF;
-						if (time<0) time+=32768;
+                        double time = 4000+(-ftt3+(Data3[ip*128+64+ich]&0x7FFF));
+                        if ((time-4000)>0) time-=32768;
+                        if (tdopt==2) {time = (ftt3-(Data3[ip*128+64+ich]&0x7FFF));
+                        if (time<0) time+=32768;}
 						// X
 						if(ich < 32) { 
 							if(Data3[ip*128+64+ich] > 0) {
@@ -507,6 +508,7 @@ void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int r
 					if (tmpQDC > QDCCUT4){
 						//double time = (ftt4 - (Data4[ip*128+64+ich]&0x7FFF));
 						double time = 4000+(-ftt4+(Data4[ip*128+64+ich]&0x7FFF));
+						//if (runopt==4) time = (ftt4 - (Data4[ip*128+64+ich]&0x7FFF));
 						//double time = Data4[ip*128+64+ich]&0x7FFF;
 						if (time<0) time+=32768;
 						// Y 
@@ -549,14 +551,16 @@ void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int r
 			//nX11 = 1; nX12 = 1; nX21 = 1; nX22 = 1;
 			//cout<<"nX11 : "<<nX11<<", nX12 : "<<nX12<<", nX21 : "<<nX21<<", nX22 : "<<nX22<<endl;
 
-			if (runopt==0 || runopt==1 || runopt==2) {if (!(nX11==1 && nX12==1 && nX21==1 && nX22==1)) continue;}
-			if (runopt==1) {
+			if (hitopt==1) {if (!(nX11==1 && nX12==1 && nX21==1 && nX22==1)) continue;}
+			if (chopt==1) {
 				int datadiff1 = Ch1X2[0]-Ch1X1[0];
 				int datadiff2 = Ch2X2[0]-Ch2X1[0];
-				if (!(datadiff1==-1 || datadiff1==0)) continue;
-				if (!(datadiff2==0 || datadiff2==1)) continue;
+				int datadiff3 = Ch2X1[0]-Ch1X2[0];
+				if (!(datadiff1==1 || datadiff1==0)) continue;
+				if (!(datadiff2==0 || datadiff2==-1)) continue;
+				if (!(datadiff3==0 || datadiff3==-1)) continue;
 			}
-			else if (runopt==2) {
+			if (centopt==1) {
 				if (!(13<=Ch1X1[0] && Ch1X1[0]<=17)) continue;
 			}
 
@@ -682,4 +686,4 @@ void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int r
 	outfile->Write();
 	outfile->Close();
 
-	}
+}

@@ -1,7 +1,7 @@
 void drawBeamSpot(){
   gROOT->Macro("~/rootlogon.C");
   gStyle->SetPadRightMargin(0.1);
-  TFile *fin = new TFile("bdcAnaTrack_Data_CNU_Cosmic_Run_getResolution_v11.root","READ");
+  TFile *fin = new TFile("bdcAnaTrack_Data_CNU_Cosmic_Run_getResolution_v16.root","READ");
 
   TH1F *h1 = (TH1F*)fin->Get("hBeamSpot1");
   TH1F *h2 = (TH1F*)fin->Get("hBeamSpot2");

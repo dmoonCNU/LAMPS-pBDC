@@ -1,4 +1,4 @@
-void anaCorr(double nsigma){
+void anaCorr(double nsigma=1){
     //gROOT->Macro("~/rootlogon.C");
     //###gStyle->SetPalette(kLake);
     gStyle->SetPalette(kRainBow);
@@ -178,8 +178,8 @@ void anaCorr(double nsigma){
 	std::cout << "Suggested x : " << (gs1->GetParameter(1))*sqrt(2)-(gs1->GetParameter(2))*sqrt(2)*nsigma << " ~ " << (gs1->GetParameter(1))*sqrt(2)+(gs1->GetParameter(2))*sqrt(2)*nsigma << std::endl;
 
     c3->SaveAs("plot_time_corr11_rotate_X.png");
-	hcorr->SetBinContent(1,gs1->GetParameter(1)*sqrt(2)*nsigma);
-	hcorr->SetBinError(1,gs1->GetParameter(2)*sqrt(2)*nsigma);
+	hcorr->SetBinContent(1,gs1->GetParameter(1)*sqrt(2));
+	hcorr->SetBinError(1,gs1->GetParameter(2)*sqrt(2));
 
 
 	//c1->cd();
@@ -226,8 +226,8 @@ void anaCorr(double nsigma){
 	std::cout << "Suggested x : " << (gs12->GetParameter(1))*sqrt(2)-(gs12->GetParameter(2))*sqrt(2)*nsigma << " ~ " << (gs12->GetParameter(1))*sqrt(2)+(gs12->GetParameter(2))*sqrt(2)*nsigma << std::endl;
 
     c3->SaveAs("plot_time_corr12_rotate_X.png");
-	hcorr->SetBinContent(2,gs12->GetParameter(1)*sqrt(2)*nsigma);
-	hcorr->SetBinError(2,gs12->GetParameter(2)*sqrt(2)*nsigma);
+	hcorr->SetBinContent(2,gs12->GetParameter(1)*sqrt(2));
+	hcorr->SetBinError(2,gs12->GetParameter(2)*sqrt(2));
 
 
 	//c1->cd();
@@ -269,8 +269,8 @@ void anaCorr(double nsigma){
 	std::cout << "Suggested x : " << (gs32->GetParameter(1))*sqrt(2)-(gs32->GetParameter(2))*sqrt(2)*nsigma << " ~ " << (gs32->GetParameter(1))*sqrt(2)+(gs32->GetParameter(2))*sqrt(2)*nsigma << std::endl;
 
     c3->SaveAs("plot_time_corr32_rotate_X.png");
-	hcorr->SetBinContent(3,gs32->GetParameter(1)*sqrt(2)*nsigma);
-	hcorr->SetBinError(3,gs32->GetParameter(2)*sqrt(2)*nsigma);
+	hcorr->SetBinContent(3,gs32->GetParameter(1)*sqrt(2));
+	hcorr->SetBinError(3,gs32->GetParameter(2)*sqrt(2));
 
 
 	//c1->cd();

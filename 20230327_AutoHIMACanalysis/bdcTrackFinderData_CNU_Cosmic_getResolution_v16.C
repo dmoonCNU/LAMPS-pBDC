@@ -27,6 +27,8 @@
 
 using namespace ROOT::Math;
 
+//isok=false;
+
 double pi = TMath::Pi();
 double pirad = pi/180;			// angle to radian cos(30) >> cos(30*pirad)
 double radpi = 180/pi;			// radian to angle 
@@ -35,14 +37,14 @@ double Xwirestart=0.;			// first signal wire(on X' plane) position (mm)
 double Ywirestart=0.;			// first signal wire(on Y' plane) position (mm)
 
 double FLH = 15;				//first layer height
-//double target_dist = 1000; // relative distance from 1 layer to target
+								//double target_dist = 1000; // relative distance from 1 layer to target
 double target_dist = -2000; // relative distance from 1 layer to target
 
 
 //int RunNumber = 9999; //RunNumber list : 520 530 531 532 533 534 550 560 561 9999 (all)
 
 const bool XTrack = true;
-const bool YTrack = true;
+const bool YTrack = false;
 const bool fulltracking = true;
 const bool getresolution = false;
 //const bool savepng = true; 
@@ -53,9 +55,9 @@ int Nmax = 1000;
 
 
 //###bool corr_ = true; // cut time correlation
-				   //bool corr_ = false; // cut time correlation
 //bool corr_ = false; // cut time correlation
-	
+//bool corr_ = false; // cut time correlation
+
 //bool angleCut_ = true;
 //###bool angleCut_ = false;
 
@@ -145,12 +147,12 @@ struct SumDistance2 {
 void getLine(double x1, double y1, double x2, double y2, double &a, double &b, double &c);
 double dist(double pointX, double pointY, double lineX1, double lineY1, double lineX2, double lineY2);
 
-void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float dataDl1X2, float dataCh2X1, float dataDl2X1, float dataCh2X2, float dataDl2X2, float dataDt1X1, float dataDt1X2, float dataDt2X1, float dataDt2X2, int ievt, int tracknum, double *pars, double *dts, TCanvas *ca, bool savepng, bool angleCut_);
+void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float dataDl1X2, float dataCh2X1, float dataDl2X1, float dataCh2X2, float dataDl2X2, float dataDt1X1, float dataDt1X2, float dataDt2X1, float dataDt2X2, int ievt, int tracknum, double *pars, double *dts, TCanvas *ca, bool savepng, bool angleCut_, double minang, double maxang);
 void trackFinderY2(float dataCh1Y1, float dataDl1Y1, float dataCh1Y2, float dataDl1Y2, float dataCh2Y1, float dataDl2Y1, float dataCh2Y2, float dataDl2Y2, float dataDt1Y1, float dataDt1Y2, float dataDt2Y1, float dataDt2Y2, int ievt, int tracknum, double *pars, double *dts, bool savepng);
 
 // create Track tree to keep track information, gradient, intersection, event time
 // This version is CNU cosmic data analysis on 20221125
-void bdcTrackFinderData_CNU_Cosmic_getResolution_v16(const bool savepng=false, bool corr_=true, double nsigma=1.5, bool angleCut_=false)
+void bdcTrackFinderData_CNU_Cosmic_getResolution_v16(const bool savepng=true, bool corr_=true, double nsigma=1.5, bool angleCut_=true, double minang=-0.467-1.0, double maxang=-0.467+1.0)
 {
 
 	gROOT->Macro("~/rootlogon.C");
@@ -159,7 +161,7 @@ void bdcTrackFinderData_CNU_Cosmic_getResolution_v16(const bool savepng=false, b
 	//gStyle->SetOptFit(0);
 
 	bool onlyx = true; //true;
-						//bool onlyx = true; //false; //true;
+					   //bool onlyx = true; //false; //true;
 	gSystem->mkdir(Form("figs"), kTRUE);
 	//int RunNumber = 561; //RunNumber list : 520 530 531 532 533 534 550 560 561
 
@@ -219,6 +221,10 @@ void bdcTrackFinderData_CNU_Cosmic_getResolution_v16(const bool savepng=false, b
 	Double_t        DT2Y1[nArr];   //[nX21]
 	Double_t        DT2Y2[nArr];   //[nX22]
 
+	Double_t        QD1X1[nArr];   //[nX11]
+	Double_t        QD1X2[nArr];   //[nX12]
+	Double_t        QD2X1[nArr];   //[nX21]
+	Double_t        QD2X2[nArr];   //[nX22]
 
 	// List of branches
 	TBranch        *b_numEvt;   //!
@@ -255,6 +261,10 @@ void bdcTrackFinderData_CNU_Cosmic_getResolution_v16(const bool savepng=false, b
 	TBranch        *b_DT2Y1;   //!
 	TBranch        *b_DT2Y2;   //!
 
+	TBranch        *b_QD1X1;   //!
+	TBranch        *b_QD1X2;   //!
+	TBranch        *b_QD2X1;   //!
+	TBranch        *b_QD2X2;   //!
 
 
 	myTree->SetBranchAddress("numEvt", &numEvt, &b_numEvt);
@@ -290,6 +300,10 @@ void bdcTrackFinderData_CNU_Cosmic_getResolution_v16(const bool savepng=false, b
 	myTree->SetBranchAddress("DT1Y2", DT1Y2, &b_DT1Y2);
 	myTree->SetBranchAddress("DT2Y1", DT2Y1, &b_DT2Y1);
 	myTree->SetBranchAddress("DT2Y2", DT2Y2, &b_DT2Y2);
+	myTree->SetBranchAddress("QD1X1", QD1X1, &b_QD1X1);
+	myTree->SetBranchAddress("QD1X2", QD1X2, &b_QD1X2);
+	myTree->SetBranchAddress("QD2X1", QD2X1, &b_QD2X1);
+	myTree->SetBranchAddress("QD2X2", QD2X2, &b_QD2X2);
 
 
 
@@ -386,115 +400,115 @@ void bdcTrackFinderData_CNU_Cosmic_getResolution_v16(const bool savepng=false, b
 	cormax3 = 91;
 	cormin3 = 72;
 	/*
-Suggested x : 71.1586 ~ 94.3414
-Suggested x : 70.8342 ~ 88.3319
-Suggested x : 72.3727 ~ 90.5929
+	   Suggested x : 71.1586 ~ 94.3414
+	   Suggested x : 70.8342 ~ 88.3319
+	   Suggested x : 72.3727 ~ 90.5929
 	 */
-/*
+	/*
 	//run 3057, Carbon 200 MeV
-   cormax1 = 88;//95
-   cormin1 = 77;//67
-   cormax2 = 86;
-   cormin2 = 75;
-   cormax3 = 200;
-   cormin3 = 0;
-  //Suggested x : 77.0569 ~ 87.2198
-  //Suggested x : 75.7286 ~ 86.1525
-*/
+	cormax1 = 88;//95
+	cormin1 = 77;//67
+	cormax2 = 86;
+	cormin2 = 75;
+	cormax3 = 200;
+	cormin3 = 0;
+	//Suggested x : 77.0569 ~ 87.2198
+	//Suggested x : 75.7286 ~ 86.1525
+	 */
 
-	    //run 3057, Carbon 200 MeV
-   cormax1 = 87;//95
-   cormin1 = 76;//67
-   cormax2 = 87;
-   cormin2 = 76;
-   cormax3 = 86;
-   cormin3 = 76;
-  //Suggested x : 77.0569 ~ 87.2198
-  //Suggested x : 75.7286 ~ 86.1525
+	//run 3057, Carbon 200 MeV
+	cormax1 = 87;//95
+	cormin1 = 76;//67
+	cormax2 = 87;
+	cormin2 = 76;
+	cormax3 = 86;
+	cormin3 = 76;
+	//Suggested x : 77.0569 ~ 87.2198
+	//Suggested x : 75.7286 ~ 86.1525
 
-   //run 3067, Carbon 200 MeV
-/*
-   Suggested x : 76.2538 ~ 86.3795
-Suggested x : 76.5791 ~ 86.7417
-Suggested x : 76.6759 ~ 85.9533
-*/
+	//run 3067, Carbon 200 MeV
+	/*
+	   Suggested x : 76.2538 ~ 86.3795
+	   Suggested x : 76.5791 ~ 86.7417
+	   Suggested x : 76.6759 ~ 85.9533
+	 */
 
-	    //run 3067, Carbon 200 MeV, no cut
-   cormax1 = 82;//95
-   cormin1 = 72;//67
-   cormax2 = 82;
-   cormin2 = 72;
-   cormax3 = 82;
-   cormin3 = 72;
-/*
-Suggested x : 72.2116 ~ 81.8265
-Suggested x : 72.066 ~ 81.571
-Suggested x : 72.3187 ~ 81.0337
-*/
+	//run 3067, Carbon 200 MeV, no cut
+	cormax1 = 82;//95
+	cormin1 = 72;//67
+	cormax2 = 82;
+	cormin2 = 72;
+	cormax3 = 82;
+	cormin3 = 72;
+	/*
+	   Suggested x : 72.2116 ~ 81.8265
+	   Suggested x : 72.066 ~ 81.571
+	   Suggested x : 72.3187 ~ 81.0337
+	 */
 
-   cormax1 = 81;//95
-   cormin1 = 71;//67
-   cormax2 = 81;
-   cormin2 = 71;
-   cormax3 = 81;
-   cormin3 = 71;
+	cormax1 = 81;//95
+	cormin1 = 71;//67
+	cormax2 = 81;
+	cormin2 = 71;
+	cormax3 = 81;
+	cormin3 = 71;
 
-/*
-Suggested x : 71.4104 ~ 80.8709
-Suggested x : 71.6664 ~ 80.861
-Suggested x : 71.6233 ~ 80.5358
-*/
-
-	//Proton 100 MeV, run 2043, ip cut no
-   cormax1 = 83;//95
-   cormin1 = 66;//67
-   cormax2 = 82;
-   cormin2 = 65;
-   cormax3 = 82;
-   cormin3 = 66;
-
-
-/*
-    Suggested x : 66.4962 ~ 82.5306
-	Suggested x : 65.5646 ~ 81.8771
-	Suggested x : 66.5279 ~ 81.5354
-*/
+	/*
+	   Suggested x : 71.4104 ~ 80.8709
+	   Suggested x : 71.6664 ~ 80.861
+	   Suggested x : 71.6233 ~ 80.5358
+	 */
 
 	//Proton 100 MeV, run 2043, ip cut no
-   cormax1 = 124;//95
-   cormin1 = 106;//67
-   cormax2 = 127;
-   cormin2 = 109;
-   cormax3 = 125;
-   cormin3 = 108;
+	cormax1 = 83;//95
+	cormin1 = 66;//67
+	cormax2 = 82;
+	cormin2 = 65;
+	cormax3 = 82;
+	cormin3 = 66;
+
+
+	/*
+	   Suggested x : 66.4962 ~ 82.5306
+	   Suggested x : 65.5646 ~ 81.8771
+	   Suggested x : 66.5279 ~ 81.5354
+	 */
+
+	//Proton 100 MeV, run 2043, ip cut no
+	cormax1 = 124;//95
+	cormin1 = 106;//67
+	cormax2 = 127;
+	cormin2 = 109;
+	cormax3 = 125;
+	cormin3 = 108;
 
 	//Carbon 200 MeV, run 3067, ip cut no, 1 sigma corr
-   cormax1 = 95;//95
-   cormin1 = 84;//67
-   cormax2 = 96;
-   cormin2 = 85;
-   cormax3 = 94;
-   cormin3 = 84;
+	cormax1 = 95;//95
+	cormin1 = 84;//67
+	cormax2 = 96;
+	cormin2 = 85;
+	cormax3 = 94;
+	cormin3 = 84;
 
-/*   
-Suggested x : 84.6111 ~ 94.423
-Suggested x : 85.3389 ~ 95.0505
-Suggested x : 84.0471 ~ 93.1663
-*/
+	/*   
+		 Suggested x : 84.6111 ~ 94.423
+		 Suggested x : 85.3389 ~ 95.0505
+		 Suggested x : 84.0471 ~ 93.1663
+	 */
 
 	//Carbon 200 MeV, run 3067, ip cut no, 2 sigma corr
-   cormax1 = 100;//95
-   cormin1 = 79;//67
-   cormax2 = 100;
-   cormin2 = 80;
-   cormax3 = 98;
-   cormin3 = 79;
+	cormax1 = 100;//95
+	cormin1 = 79;//67
+	cormax2 = 100;
+	cormin2 = 80;
+	cormax3 = 98;
+	cormin3 = 79;
 
-/*
-Suggested x : 79.7051 ~ 99.329
-Suggested x : 80.4831 ~ 99.9063
-Suggested x : 79.4876 ~ 97.7259
-*/
+	/*
+	   Suggested x : 79.7051 ~ 99.329
+	   Suggested x : 80.4831 ~ 99.9063
+	   Suggested x : 79.4876 ~ 97.7259
+	 */
 
 	TFile* fincorr = new TFile("anaCorr_result.root","READ");
 	TH1D* hcorr = (TH1D*)fincorr->Get("hcorr");
@@ -518,7 +532,7 @@ Suggested x : 79.4876 ~ 97.7259
 
 
 
-   int nlbin = 32;
+	int nlbin = 32;
 	TH1F *hXL1 = new TH1F("hXL1",";fired Channels at X1;Counts",nlbin,0,32);
 	TH1F *hXL2 = new TH1F("hXL2",";fired Channels at X2;Counts",nlbin,0,32);
 	TH1F *hXL3 = new TH1F("hXL3",";fired Channels at X3;Counts",nlbin,0,32);
@@ -567,6 +581,8 @@ Suggested x : 79.4876 ~ 97.7259
 	TH2F *hChiDifX = new TH2F("hChiDifX",";chisqaure;difference (cm)",100,0,10,300,-3.0,3.0);
 	TH2F *hChiDifY = new TH2F("hChiDifY",";chisqaure;difference (cm)",100,0,10,300,-3.0,3.0);
 
+	TH2F *hPosX1Ang = new TH2F("hPosX1Ang",";PosX (mm);angle (deg)",1600,0,160,600,-3,3);
+	TH2F *hPosX4Ang = new TH2F("hPosX4Ang",";PosX (mm);angle (deg)",1600,0,160,600,-3,3);
 
 	TH1D* TimeMaxX11 = new TH1D("TimeMaxX11",";time;Counts",500,0,500);
 	TH1D* TimeMaxX21 = new TH1D("TimeMaxX21",";time;Counts",500,0,500);
@@ -602,13 +618,33 @@ Suggested x : 79.4876 ~ 97.7259
 	hPadY->GetYaxis()->CenterTitle();
 
 
+	TH1D* hQDX11 = new TH1D("hQDX11",";QDC;Entries",1500,-500,1000);
+	TH1D* hQDX12 = new TH1D("hQDX12",";QDC;Entries",1500,-500,1000);
+	TH1D* hQDX21 = new TH1D("hQDX21",";QDC;Entries",1500,-500,1000);
+	TH1D* hQDX22 = new TH1D("hQDX22",";QDC;Entries",1500,-500,1000);
+
+	TH2D* hQDvsDTX11 = new TH2D("hQDvsDTX11",";QDC;drift time (ns)",1500,-500,1000,200,0,200);
+	TH2D* hQDvsDTX12 = new TH2D("hQDvsDTX12",";QDC;drift time (ns)",1500,-500,1000,200,0,200);
+	TH2D* hQDvsDTX21 = new TH2D("hQDvsDTX21",";QDC;drift time (ns)",1500,-500,1000,200,0,200);
+	TH2D* hQDvsDTX22 = new TH2D("hQDvsDTX22",";QDC;drift time (ns)",1500,-500,1000,200,0,200);
+
+	TH2D* hQDvsChX11 = new TH2D("hQDvsChX11",";QDC;drift time (ns)",1500,-500,1000,32,0,32);
+	TH2D* hQDvsChX12 = new TH2D("hQDvsChX12",";QDC;drift time (ns)",1500,-500,1000,32,0,32);
+	TH2D* hQDvsChX21 = new TH2D("hQDvsChX21",";QDC;drift time (ns)",1500,-500,1000,32,0,32);
+	TH2D* hQDvsChX22 = new TH2D("hQDvsChX22",";QDC;drift time (ns)",1500,-500,1000,32,0,32);
+
+
+
 	TCanvas *c1 = new TCanvas("c1","",1500,330);
 	//TCanvas *c1 = new TCanvas("c1","",1500,880);
 	TCanvas *ca = new TCanvas("ca","",1500,880);
-	TH2F *hPadXa = new TH2F("hPadXa",";x (mm) ;z (mm) ",175,-10.0,165,165,0,100.0);
+	//TCanvas *ca = new TCanvas("ca","",150,1500);
+	//TH2F *hPadXa = new TH2F("hPadXa",";x (mm) ;z (mm) ",175,-10.0,165,165,0,100.0);
+	TH2F *hPadXa = new TH2F("hPadXa",";x (mm) ;z (mm) ",175,-10.0,165,520,-2500.0,100.0);
 	hPadXa->GetYaxis()->CenterTitle();
 	hPadXa->GetXaxis()->CenterTitle();
-	TH2F *hPadX1a = new TH2F("hPadX1a",";x (mm) ;z (mm) ",175,-10,165,165,0.0,60.0);
+	//TH2F *hPadX1a = new TH2F("hPadX1a",";x (mm) ;z (mm) ",175,-10,165,165,0.0,60.0);
+	TH2F *hPadX1a = new TH2F("hPadX1a",";x (mm) ;z (mm) ",175,-10,165,520,-2500.0,100.0);
 	hPadX1a->GetYaxis()->CenterTitle();
 	hPadX1a->GetXaxis()->CenterTitle();
 	ca->cd();
@@ -707,10 +743,10 @@ Suggested x : 79.4876 ~ 97.7259
 		hDistVsTimeY[i] = new TH2F(Form("hDistVsTimeY_%d",i),";time (ns);Difference (mm)", 150, 0, 150, 100, -2.0, 2.0);
 	}
 
-	
+
 	//if (maxevt>=200000) maxevt=200000;
 	if(savepng == true) maxevt = Nmax;
-	
+
 	int eventCnt = 0;
 	int eventChk = 0;
 	int ievtpre=0;
@@ -744,6 +780,10 @@ Suggested x : 79.4876 ~ 97.7259
 		float dataDt2Y1[nArr] = {-999.0};
 		float dataDt2Y2[nArr] = {-999.0};
 
+		float dataQD1X1[nArr] = {-999.0};
+		float dataQD1X2[nArr] = {-999.0};
+		float dataQD2X1[nArr] = {-999.0};
+		float dataQD2X2[nArr] = {-999.0};
 
 		cout<<" "<<endl;
 		cout<<"Event : "<<ievt<<endl;
@@ -763,24 +803,28 @@ Suggested x : 79.4876 ~ 97.7259
 			dataCh1X1[j] = Ch1X1[j];
 			dataDl1X1[j] = DL1X1[j];
 			dataDt1X1[j] = DT1X1[j];
+			dataQD1X1[j] = QD1X1[j];
 		}
 		for(int j = 0; j < nX12; j++){
 			cout<<"Ch1X2 : "<<Ch1X2[j]<<" DL1X2 : "<<DL1X2[j]<<endl;
 			dataCh1X2[j] = Ch1X2[j];
 			dataDl1X2[j] = DL1X2[j];
 			dataDt1X2[j] = DT1X2[j];
+			dataQD1X2[j] = QD1X2[j];
 		}
 		for(int j = 0; j < nX21; j++){
 			cout<<"Ch2X1 : "<<Ch2X1[j]<<" DL2X1 : "<<DL2X1[j]<<endl;
 			dataCh2X1[j] = Ch2X1[j];
 			dataDl2X1[j] = DL2X1[j];
 			dataDt2X1[j] = DT2X1[j];
+			dataQD2X1[j] = QD2X1[j];
 		}
 		for(int j = 0; j < nX22; j++){
 			cout<<"Ch2X2 : "<<Ch2X2[j]<<" DL2X2 : "<<DL2X2[j]<<endl;
 			dataCh2X2[j] = Ch2X2[j];
 			dataDl2X2[j] = DL2X2[j];
 			dataDt2X2[j] = DT2X2[j];
+			dataQD2X2[j] = QD2X2[j];
 		}
 		if(onlyx == false){
 			for(int j = 0; j < nY11; j++){
@@ -855,22 +899,24 @@ Suggested x : 79.4876 ~ 97.7259
 							for(int Y12 = 0; Y12<nY12;Y12++)
 							{
 								int datadiff1 = dataCh1Y2[Y12]-dataCh1Y1[Y11];
-								if(datadiff1>=0 && datadiff1<=1)
+								if(datadiff1==0 || datadiff1==1)
 								{
 									for(int Y21 = 0;Y21<nY21;Y21++)
 									{
 										for(int Y22=0;Y22<nY22;Y22++)
 										{
 											int datadiff2 = dataCh2Y2[Y22]-dataCh2Y1[Y21];
-											if(datadiff2>=0 && datadiff2<=1)
+											if(datadiff2==0 || datadiff2==-1)
 											{
+												int datadiff3 = dataCh2X1[0]-dataCh1X2[0];
+												if (!(datadiff3==0 || datadiff3==-1)) continue;
 												if(dataCh1Y1[Y11] - dataCh2Y1[Y21] != 0) continue;
 												if(dataCh1Y2[Y12] - dataCh2Y2[Y22] != 0) continue;
 												Ych1[tracknum] = dataCh1Y1[Y11];
 												Ych2[tracknum] = dataCh1Y2[Y12];
 												Ych3[tracknum] = dataCh2Y1[Y21];
 												Ych4[tracknum] = dataCh2Y2[Y22];
-												double pars[20] = {0.0}; // distances at each layer
+												double pars[21] = {0.0}; // distances at each layer
 												double pars1[20] = {0.0}; // distances at each layer
 												double dts[6] = {0.0};
 												double dts1[6] = {0.0};
@@ -977,6 +1023,12 @@ Suggested x : 79.4876 ~ 97.7259
 		int XCH12 = 0;
 		int XCH21 = 0;
 		int XCH22 = 0;
+		double XQD11 = 0;
+		double XQD12 = 0;
+		double XQD21 = 0;
+		double XQD22 = 0;
+
+
 		double XDT11 = 0.0;
 		double XDT12 = 0.0;
 		double XDT21 = 0.0;
@@ -1010,15 +1062,17 @@ Suggested x : 79.4876 ~ 97.7259
 
 
 							//if(datadiff1>=0 && datadiff1<=1)
-						if(datadiff1>=0 && datadiff1<=1)
+							if(datadiff1==0 || datadiff1==1)
 							{
 								for(int X21 = 0;X21<nX21;X21++)
 								{
 									for(int X22=0;X22<nX22;X22++)
 									{
+										int datadiff3 = dataCh2X1[0]-dataCh1X2[0];
+										if (!(datadiff3==0 || datadiff3==-1)) continue;
 										int datadiff2 = dataCh2X2[X22]-dataCh2X1[X21];
 										//if(datadiff2>=0 && datadiff2<=1)
-									if(datadiff2>=-1 && datadiff2<=0)
+										if(datadiff2==-1 || datadiff2==0)
 										{
 											//if(dataCh1X1[X11] - dataCh2X1[X21] != 0) continue;
 											//if(dataCh1X2[X12] - dataCh2X2[X22] != 0) continue;
@@ -1026,7 +1080,7 @@ Suggested x : 79.4876 ~ 97.7259
 											Xch2[tracknum1] = dataCh1X2[X12];
 											Xch3[tracknum1] = dataCh2X1[X21];
 											Xch4[tracknum1] = dataCh2X2[X22];
-											double pars[20] = {0.0}; // distances at each layer
+											double pars[21] = {0.0}; // distances at each layer
 											double pars1[20] = {0.0}; // distances at each layer
 											double dts[6] = {0.0};
 											double dts1[6] = {0.0};
@@ -1050,9 +1104,11 @@ Suggested x : 79.4876 ~ 97.7259
 												}
 												//if(tmax4 > 80)  continue;
 												//if(tmax4 < 40)  continue;
+												int isok=0;
 												trackFinderX2(dataCh1X1[X11], dataDl1X1[X11], dataCh1X2[X12], dataDl1X2[X12], dataCh2X1[X21], 
 														dataDl2X1[X21], dataCh2X2[X22], dataDl2X2[X22], dataDt1X1[X11], dataDt1X2[X12], dataDt2X1[X21], dataDt2X2[X22], 
-														ievt, tracknum1, pars, dts, ca, savepng, angleCut_);
+														ievt, tracknum1, pars, dts, ca, savepng, angleCut_, minang, maxang);
+												if (pars[20]==0) {std::cout << "@@@@ isok : " << pars[20] << std::endl;continue;}
 												if(tracknum1==0)
 												{
 													Xgrad[0] = pars[0];
@@ -1066,6 +1122,10 @@ Suggested x : 79.4876 ~ 97.7259
 													XCH12 = dataCh1X2[X12];
 													XCH21 = dataCh2X1[X21];
 													XCH22 = dataCh2X2[X22];
+													XQD11 = dataQD1X1[X11];
+													XQD12 = dataQD1X2[X12];
+													XQD21 = dataQD2X1[X21];
+													XQD22 = dataQD2X2[X22];
 													XDT11 = dataDt1X1[X11];
 													XDT12 = dataDt1X2[X12];
 													XDT21 = dataDt2X1[X21];
@@ -1097,6 +1157,10 @@ Suggested x : 79.4876 ~ 97.7259
 													XCH12 = dataCh1X2[X12];
 													XCH21 = dataCh2X1[X21];
 													XCH22 = dataCh2X2[X22];
+													XQD11 = dataQD1X1[X11];
+													XQD12 = dataQD1X2[X12];
+													XQD21 = dataQD2X1[X21];
+													XQD22 = dataQD2X2[X22];
 													XDT11 = dataDt1X1[X11];
 													XDT12 = dataDt1X2[X12];
 													XDT21 = dataDt2X1[X21];
@@ -1154,7 +1218,8 @@ Suggested x : 79.4876 ~ 97.7259
 				//if(angleCut_ == true && fabs(angle) > 5) continue;
 				//if(angleCut_ == true && -1.8<angle && angle<2.2) continue;
 				//###if(angleCut_ == true && (!(-0.5<angle && angle<1.5))) continue;
-				if(angleCut_ == true && (!(-2.0<angle && angle<2.0))) continue;
+				//if(angleCut_ == true && (!(-2.0<angle && angle<2.0))) continue;
+				if(angleCut_ == true && (!(minang<angle && angle<maxang))) continue;
 
 
 				hAngX->Fill(angle);
@@ -1211,6 +1276,24 @@ Suggested x : 79.4876 ~ 97.7259
 				hPosX2->Fill(XPos2);
 				hPosX3->Fill(XPos3);
 				hPosX4->Fill(XPos4);
+				hPosX1Ang->Fill(XPos1,angle);
+				hPosX4Ang->Fill(XPos4,angle);
+
+				hQDX11->Fill(XQD11);
+				hQDX12->Fill(XQD12);
+				hQDX21->Fill(XQD21);
+				hQDX22->Fill(XQD22);
+
+				hQDvsDTX11->Fill(XQD11,time1);
+				hQDvsDTX12->Fill(XQD12,time2);
+				hQDvsDTX21->Fill(XQD21,time3);
+				hQDvsDTX22->Fill(XQD22,time4);
+
+				hQDvsChX11->Fill(XQD11,XCH11);
+				hQDvsChX12->Fill(XQD12,XCH12);
+				hQDvsChX21->Fill(XQD21,XCH21);
+				hQDvsChX22->Fill(XQD22,XCH22);
+
 			}
 			if(trkNumY>0 && onlyx == false){
 				double angle = 0.0;
@@ -1273,8 +1356,8 @@ Suggested x : 79.4876 ~ 97.7259
 		}
 	}//for
 	cout<<"### Number of tracks : "<<eventChk<<endl;
-		ca->cd();
-		ca->SaveAs("ca.png");
+	ca->cd();
+	ca->SaveAs("ca.png");
 
 
 	outfile->cd();
@@ -1407,6 +1490,26 @@ Suggested x : 79.4876 ~ 97.7259
 	hDistVsTimeY[1]->Write();
 	hDistVsTimeY[2]->Write();
 	hDistVsTimeY[3]->Write();
+
+	hPosX1Ang->Write();
+	hPosX4Ang->Write();
+
+	hQDX11->Write();
+	hQDX12->Write();
+	hQDX21->Write();
+	hQDX22->Write();
+
+	hQDvsDTX11->Write();
+	hQDvsDTX12->Write();
+	hQDvsDTX21->Write();
+	hQDvsDTX22->Write();
+
+	hQDvsChX11->Write();
+	hQDvsChX12->Write();
+	hQDvsChX21->Write();
+	hQDvsChX22->Write();
+
+
 
 	outfile->Write();
 	outfile->Close();
@@ -1995,7 +2098,7 @@ void trackFinderY2(float dataCh1Y1, float dataDl1Y1, float dataCh1Y2, float data
 }
 
 
-void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float dataDl1X2, float dataCh2X1, float dataDl2X1, float dataCh2X2, float dataDl2X2, float dataDt1X1, float dataDt1X2, float dataDt2X1, float dataDt2X2, int ievt, int tracknum, double *pars, double *dts, TCanvas *ca, bool savepng, bool angleCut_){
+void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float dataDl1X2, float dataCh2X1, float dataDl2X1, float dataCh2X2, float dataDl2X2, float dataDt1X1, float dataDt1X2, float dataDt2X1, float dataDt2X2, int ievt, int tracknum, double *pars, double *dts, TCanvas *ca, bool savepng, bool angleCut_, double minang, double maxang){
 	cout<<"Start track with x axis at "<<ievt<<" Event !!!"<<endl;
 	//cout<<"Channel X11 : "<<dataCh1X1<<", X12 : "<<dataCh1X2<<", X21 : "<<dataCh2X1<<", X22 : "<<dataCh1X2<<endl;
 	//cout<<"Drift Length DL11 : "<<dataDl1X1<<", DL12 : "<<dataDl1X2<<", DL21 : "<<dataDl2X1<<", DL22 : "<<dataDl2X2<<endl;
@@ -2094,22 +2197,22 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 	wireposx[3] = wireX4[firedChX[3]];wireposy[3] = wireY4[firedChY[3]];
 	cout<<"dhmoon chk 1-2 wireposX11 : "<<wireposx[0]<<", wireposX12 : "<<wireposx[1]<<", wireposX21 : "<<wireposx[2]<<", wireposX22 : "<<wireposx[3]<<endl;
 	cout<<"dhmoon chk 1-3 wireposX11 : "<<wireposy[0]<<", wireposX12 : "<<wireposy[1]<<", wireposX21 : "<<wireposy[2]<<", wireposX22 : "<<wireposy[3]<<endl;
-/*
-	double driftlth[4];
-	double dlcal1 = -0.02;
-	double dlcal2 = -0.02;
-	double dlcal3 = -0.02;
-	double dlcal4 = -0.02;
+	/*
+	   double driftlth[4];
+	   double dlcal1 = -0.02;
+	   double dlcal2 = -0.02;
+	   double dlcal3 = -0.02;
+	   double dlcal4 = -0.02;
 
-	driftlth[0] = dataDl1X1+dlcal1;
-	driftlth[1] = dataDl1X2+dlcal2;
-	driftlth[2] = dataDl2X1+dlcal3;
-	driftlth[3] = dataDl2X2+dlcal4;
+	   driftlth[0] = dataDl1X1+dlcal1;
+	   driftlth[1] = dataDl1X2+dlcal2;
+	   driftlth[2] = dataDl2X1+dlcal3;
+	   driftlth[3] = dataDl2X2+dlcal4;
 
-	for(int l = 0; l < nlayer; l++){
-		if(driftlth[l] < 0) driftlth[l] = 0.02;
-	}
-*/
+	   for(int l = 0; l < nlayer; l++){
+	   if(driftlth[l] < 0) driftlth[l] = 0.02;
+	   }
+	 */
 	double driftlth[4];
 	double dlcal1 = -0.01;
 	double dlcal2 = -0.01;
@@ -2151,13 +2254,13 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 	arc3->Draw("");
 	arc4->Draw("");
 	if (savepng) {
-	ca->cd();
-/*
-	arc1->Draw("same");
-	arc2->Draw("same");
-	arc3->Draw("same");
-	arc4->Draw("same");
-*/
+		ca->cd();
+		/*
+		   arc1->Draw("same");
+		   arc2->Draw("same");
+		   arc3->Draw("same");
+		   arc4->Draw("same");
+		 */
 	}
 	c1->cd();
 
@@ -2261,7 +2364,7 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 		}
 		//tmp = 5.0;
 	}
-
+	if (tmp>=1.0) {std::cout << "minimum chisquare is larger than 1.0" << std::endl;pars[20]=0;return;}
 	cout<<"Seed Chisquare Number : "<<seedChis<<endl;
 
 
@@ -2333,8 +2436,8 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 
 	if (lineSeed->GetParameter(0)==0.0) {bdcTrack->SetParameter(0, 99999999.9);bdcTrack->SetParameter(1,-1*lineSeed->GetParameter(1)*99999999.9);}
 	else {
-	bdcTrack->SetParameter(0, 1.0/lineSeed->GetParameter(0));
-	bdcTrack->SetParameter(1, -1*lineSeed->GetParameter(1)/lineSeed->GetParameter(0));
+		bdcTrack->SetParameter(0, 1.0/lineSeed->GetParameter(0));
+		bdcTrack->SetParameter(1, -1*lineSeed->GetParameter(1)/lineSeed->GetParameter(0));
 	}
 	pars[0]=bdcTrack->GetParameter(0);
 	pars[1]=bdcTrack->GetParameter(1);
@@ -2347,18 +2450,18 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 
 	if (lineSeed1->GetParameter(0)==0.0) {bdcTrack_3p->SetParameter(0, 99999999.9);bdcTrack_3p->SetParameter(1,-1*lineSeed1->GetParameter(1)*99999999.9);}
 	else {
-	bdcTrack_3p->SetParameter(0, 1.0/lineSeed1->GetParameter(0));
-	bdcTrack_3p->SetParameter(1, -1*lineSeed1->GetParameter(1)/lineSeed1->GetParameter(0));
+		bdcTrack_3p->SetParameter(0, 1.0/lineSeed1->GetParameter(0));
+		bdcTrack_3p->SetParameter(1, -1*lineSeed1->GetParameter(1)/lineSeed1->GetParameter(0));
 	}
 	double angle1 = 0.0;
 	double grd1 = 0.0;
 	double ysec1;
 	if (lineSeed->GetParameter(0)==0.0) {angle1=90;ysec1=-1*lineSeed->GetParameter(1)*99999999.9;}
 	else {
-	grd1 = 1.0/lineSeed->GetParameter(0);
-	ysec1 = -1*lineSeed->GetParameter(1)/lineSeed->GetParameter(0); // Jain added
-	if(atan(grd1)*180/pi > 0) angle1 = 90-atan(grd1)*180/pi;
-	if(atan(grd1)*180/pi < 0) angle1 = -90-atan(grd1)*180/pi;
+		grd1 = 1.0/lineSeed->GetParameter(0);
+		ysec1 = -1*lineSeed->GetParameter(1)/lineSeed->GetParameter(0); // Jain added
+		if(atan(grd1)*180/pi > 0) angle1 = 90-atan(grd1)*180/pi;
+		if(atan(grd1)*180/pi < 0) angle1 = -90-atan(grd1)*180/pi;
 	}
 
 	double angle2 = 0.0;
@@ -2366,10 +2469,10 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 	double ysec2;
 	if (lineSeed1->GetParameter(0)==0.0) {angle2=90;ysec2=-1*lineSeed1->GetParameter(1)*99999999.9;}
 	else {
-	grd2 = 1.0/lineSeed1->GetParameter(0);
-	ysec2 = -1*lineSeed1->GetParameter(1)/lineSeed1->GetParameter(0); // Jain added
-	if(atan(grd2)*180/pi > 0) angle2 = 90-atan(grd2)*180/pi;
-	if(atan(grd2)*180/pi < 0) angle2 = -90-atan(grd2)*180/pi;
+		grd2 = 1.0/lineSeed1->GetParameter(0);
+		ysec2 = -1*lineSeed1->GetParameter(1)/lineSeed1->GetParameter(0); // Jain added
+		if(atan(grd2)*180/pi > 0) angle2 = 90-atan(grd2)*180/pi;
+		if(atan(grd2)*180/pi < 0) angle2 = -90-atan(grd2)*180/pi;
 	}
 	cout<<"Angle with 4p at X : "<<angle1<<endl;
 	cout<<"Angle with 3p at X : "<<angle2<<endl;
@@ -2547,16 +2650,17 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 	dts[2] = dataDt2X1;
 	dts[3] = dataDt2X2;
 
-			double angle = 0.0;
-				if(atan(pars[0])*180/pi > 0) angle = 90-atan(pars[0])*180/pi;
-				if(atan(pars[0])*180/pi < 0) angle = -90-atan(pars[0])*180/pi;
-				cout<<"Histogram angle : "<<angle<<endl;
-				//if(fabs(angle) > 30) continue;
-				//###if(angleCut_ == true && fabs(angle) > 7) continue;
-				//if(angleCut_ == true && fabs(angle) > 5) continue;
-				//if(angleCut_ == true && -1.8<angle && angle<2.2) continue;
-				//###if(angleCut_ == true && (!(-0.5<angle && angle<1.5))) continue;
-				if(angleCut_ == true && (!(-2.0<angle && angle<2.0))) return;
+	double angle = 0.0;
+	if(atan(pars[0])*180/pi > 0) angle = 90-atan(pars[0])*180/pi;
+	if(atan(pars[0])*180/pi < 0) angle = -90-atan(pars[0])*180/pi;
+	cout<<"Histogram angle : "<<angle<<endl;
+	//if(fabs(angle) > 30) continue;
+	//###if(angleCut_ == true && fabs(angle) > 7) continue;
+	//if(angleCut_ == true && fabs(angle) > 5) continue;
+	//if(angleCut_ == true && -1.8<angle && angle<2.2) continue;
+	//###if(angleCut_ == true && (!(-0.5<angle && angle<1.5))) continue;
+	//if(angleCut_ == true && (!(-2.0<angle && angle<2.0))) return;
+	if(angleCut_ == true && (!(minang<angle && angle<maxang))) {std::cout << "angle cut failed!!" << std::endl;pars[20]=0;return;}
 
 	c1->cd(2);
 	hPadX1->Draw();
@@ -2581,7 +2685,7 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 	arc4->Draw("");
 
 	bdcTrack->SetLineStyle(1);
-	bdcTrack->SetLineWidth(3);
+	bdcTrack->SetLineWidth(1);//3
 	bdcTrack_3p->SetLineColor(kMagenta);
 	track->SetLineColor(kGreen+1);
 	track_3p->SetLineColor(kBlue+1);
@@ -2619,6 +2723,9 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 	cout<<"Track position at Top X : "<<pars[12]<<", seedx 3 : "<<seedy[3]<<endl;
 	cout<<"Track position at Mid X : "<<pars[13]<<", seedx 1 : "<<(seedy[0]+seedy[3])/2<<endl;
 	cout<<"Track position at Bot X : "<<pars[14]<<", seedx 0 : "<<seedy[0]<<endl;
+
+	pars[20]=1;
+	std::cout << "pars[20]: " << pars[20] << std::endl;
 	if(savepng)
 	{
 		TLatex *lt1 = new TLatex();
@@ -2635,13 +2742,16 @@ void trackFinderX2(float dataCh1X1, float dataDl1X1, float dataCh1X2, float data
 		c1->SaveAs(Form("figs/plot_track_X2_%d_%d.png",ievt,tracknum));
 		//c1->SaveAs(Form("figs/plot_track_X2_%d_%d.pdf",ievt,tracknum));
 		//c1->SaveAs(Form("figs/plot_track_X2_%d_%d.C",ievt,tracknum));
-	ca->cd();
-	arc1->Draw("same");
-	arc2->Draw("same");
-	arc3->Draw("same");
-	arc4->Draw("same");
+		ca->cd();
+		arc1->Draw("same");
+		arc2->Draw("same");
+		arc3->Draw("same");
+		arc4->Draw("same");
+		bdcTrack->SetLineColorAlpha(kTeal+3,0.2);
+		bdcTrack->SetLineStyle(1);
+		bdcTrack->SetLineWidth(2);//4
 
-	bdcTrack->Draw("same");
+		bdcTrack->Draw("same");
 
 
 

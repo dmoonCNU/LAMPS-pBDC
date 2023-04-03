@@ -32,34 +32,31 @@ void set_plot_style()
 	gStyle->SetNumberContours(NCont);
 }
 
-void bdcDrawAll_KOMAC(int local, int RunNo){
+//void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=0){
+void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
+
+
+
+
 	gROOT->Macro("~/rootlogon.C");
 	gStyle->SetOptStat(0);
 	gStyle->SetPadRightMargin(0.1);
-	/*
-	   int RunNo = 5014;
-	   int ASDNo = 0;
-	 */
 
-	//int RunNo = 3057;
+	TFile* fout = new TFile("bdcDrawAll_KOMAC_getped.root","RECREATE");
 
-
-	//int RunNo = 2999;
-
+	TH1D* hped[3];
 	for (int ASDNo = 0;ASDNo<3;ASDNo++){
 
+		hped[ASDNo]= new TH1D(Form("hped_ASD%d",ASDNo+16),";Ch;Average Ped",64,0,64);
 
-		//TFile* itf = new TFile(Form("~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data/%d_ASD%d.root",RunNo,ASDNo+16),"READ");
-		//TFile* itf = new TFile(Form("~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data/%d_ASD%d.root",RunNo,ASDNo+16),"READ");
-		TFile* itf = new TFile(Form("~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data/long/%d_ASD%d.root",RunNo,ASDNo+16),"READ");
+		//TFile* itf = new TFile(Form("%s/%d_ASD%d.root",loca.Data(),RunNo,ASDNo+16),"READ");
 
-	TFile* itf;
-	if (local==1) itf = new TFile(Form("~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data/%d_ASD%d.root",RunNo,ASDNo+16),"READ");
-	else if (local==2) itf = new TFile(Form("~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data/%d_ASD%d.root",RunNo,ASDNo+16),"READ"); 
+		
+		   TFile* itf;
+		   if (locano==1) itf = new TFile(Form("~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data/%d_ASD%d.root",RunNo,ASDNo+16),"READ");
+		   else if (locano==2) itf = new TFile(Form("~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data/%d_ASD%d.root",RunNo,ASDNo+16),"READ"); 
+		 
 
-		//###TFile* itf = new TFile(Form("ASD_%d_%d.root",RunNo,ASDNo)); // 460
-		//TFile* itf = new TFile(Form("220526_Cosmic_c1430_a1430_0C00_evt30k_PMTCoin_Delay180ns_expset_aBDCaASD_t106_ASD%d.root",ASDNo));
-		//TFile* itf = new TFile("220526_Cosmic_c1430_a1430_0C00_evt30k_PMTCoin_Delay180ns_expset_aBDCaASD_t106_ASD16.root");
 		TTree* itr = (TTree*)itf->Get("DataTree");
 		Int_t EventNum;
 		UShort_t type;
@@ -95,8 +92,8 @@ void bdcDrawAll_KOMAC(int local, int RunNo){
 		//TCanvas* can = new TCanvas("can","can",0,66,1000,600);
 		can->Divide(4,2);
 
-		TH2D* hisQDC1= new TH2D("hisQDC1","hisQDC1;time;QDC",10,0,10,800,200,800);
-		TH2D* hisQDC2= new TH2D("hisQDC2","hisQDC2;time;QDC",10,0,10,800,200,800);
+		TH2D* hisQDC1= new TH2D("hisQDC1","hisQDC1;time;QDC",10,0,10,800,0,800);
+		TH2D* hisQDC2= new TH2D("hisQDC2","hisQDC2;time;QDC",10,0,10,800,0,800);
 		TH1D* hisTDC1 = new TH1D("hisTDC1" ,"hisTDC1;channel;TDC Hit",64,0,64);
 		TH1D* hisTDC2 = new TH1D("hisTDC2" ,"hisTDC2;channel;TDC Hit",64,0,64);
 
@@ -112,7 +109,7 @@ void bdcDrawAll_KOMAC(int local, int RunNo){
 		TH1D* hQDC1 = new TH1D("hQDC1",";QDC;Counts",500,0,1000);
 		TH1D* hIpTime = new TH1D("hIpTime",";ip;Counts",120,0,120);
 		TH1D* hIpTimeQDC = new TH1D("hIpTimeQDC",";ip;QDC",120,0,120);
-		TH2D* hIpTimeQDC2 = new TH2D("hIpTimeQDC2",";ip;QDC",120,0,120,500,0,1000);
+		TH2D* hIpTimeQDC2 = new TH2D("hIpTimeQDC2",";ip;QDC",120,0,120,800,0,800);
 
 		TH1D* hQDCPeak1 = new TH1D("hQDCPeak1",";IP;Average QDC",10,0,10);
 		TH1D* hQDCPeak2 = new TH1D("hQDCPeak2",";IP;Average QDC",10,0,10);
@@ -121,6 +118,9 @@ void bdcDrawAll_KOMAC(int local, int RunNo){
 
 		TH1D* hQDCPeak11 = new TH1D("hQDCPeak11",";IP;Second peak",2000,0.05,1.05);
 
+		TH1D* hisQDCDist1= new TH1D("hisQDCDist1","hisQDCDist1;QDC;Entries",800,0,800);
+		TH1D* hisQDCDist2= new TH1D("hisQDCDist2","hisQDCDist2;QDC;Entries",800,0,800);
+	
 		for (int i=0;i<10;i++) {
 			hQDCPeak1->SetBinContent(i+1,0);
 			hQDCPeak2->SetBinContent(i+1,0);
@@ -193,7 +193,11 @@ void bdcDrawAll_KOMAC(int local, int RunNo){
 					double tmpQDC=Data[ip*128+ich];
 					//if(!(tmpQDC > 330)) continue;
 
-					if ( Data[ip*128+64+ich] > 0) hisQDC1->Fill(ip,tmpQDC);
+					//					if ( Data[ip*128+64+ich] > 0) hisQDC1->Fill(ip,tmpQDC);
+					if (QDCopt==1) {hisQDC1->Fill(ip,tmpQDC);hisQDCDist1->Fill(tmpQDC);}
+					else if (QDCopt==2) {
+						if ( Data[ip*128+64+ich] > 0) {hisQDC1->Fill(ip,tmpQDC);hisQDCDist1->Fill(tmpQDC);}
+					}
 					if ( Data[ip*128+64+ich] > 0) {
 						hQDC1->Fill(tmpQDC);
 						if(tmpQDC > QDCcut) hIpTime->Fill(ip);
@@ -277,8 +281,8 @@ void bdcDrawAll_KOMAC(int local, int RunNo){
 					QDCPed2done=true;
 
 				}
-		
-		}//ich
+
+			}//ich
 			double maxtmp=-999;
 			int maxch=-9;
 			/*		   for (int i=0;i<64;i++) {
@@ -300,8 +304,8 @@ void bdcDrawAll_KOMAC(int local, int RunNo){
 			if (isFired) Eff++;
 			hNHits1->Fill(nHits1);
 			hNHits2->Fill(nHits2);
-		
-		hQDCPeak11->Fill((Data[4*128+(QDCPeak1Ch[ASDNo])]-200)/(Data[6*128+(QDCPeak1Ch[ASDNo])]-200));
+
+			hQDCPeak11->Fill((Data[4*128+(QDCPeak1Ch[ASDNo])]-200)/(Data[6*128+(QDCPeak1Ch[ASDNo])]-200));
 
 		}//ievt
 		std::cout << "Num. of Trig. : " << itr->GetEntries() << std::endl;
@@ -325,7 +329,9 @@ void bdcDrawAll_KOMAC(int local, int RunNo){
 		//lt1->DrawLatex(0.2, 0.9, "HV C-1415 A-1375 at ASD 18");
 
 		can->cd(2);
-		hisTDC1->Draw("E");
+		//hisTDC1->Draw("E");
+		gPad->SetLogy();
+		hisQDCDist1->Draw("e");
 
 		can->cd(3);
 		hNHits1->Draw("E");
@@ -393,5 +399,9 @@ void bdcDrawAll_KOMAC(int local, int RunNo){
 		   }
 		 */
 	}
-
+	fout->cd();
+	for (int i=0;i<3;i++) {
+		hped[i]->Write();
+	}
+	fout->Close();
 }

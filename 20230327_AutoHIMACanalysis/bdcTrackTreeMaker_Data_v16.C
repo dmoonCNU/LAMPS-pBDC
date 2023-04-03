@@ -24,11 +24,13 @@ using namespace std;
 const bool MAXQDC = false; //Find MaxQDC Hit which will be used to make reconstrcution track.
 
 //void bdcTrackTreeMaker_Data_v16(TString loc="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data", int RunNumber=3067){
-void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int runopt=0, int RunNumber=3067){
+//void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int runopt=0, int RunNumber=3067){
+//void bdcTrackTreeMaker_Data_v16(TString loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data", int minip=-1, int maxip=10, int runopt=1, int RunNumber=3067){
+void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=1, int maxip=7, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int pedopt=1,  int RunNumber=3067){
 
-	    TString loca;
-    if (locano==1) loca="~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data";
-    else if (locano==2) loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data";
+	TString loca;
+	if (locano==1) loca="~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data";
+	else if (locano==2) loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data";
 
 	TFile* itf1 = new TFile(Form("%s/%d_ASD16.root",loca.Data(),RunNumber),"READ"); // X1-X1'
 	TFile* itf2 = new TFile(Form("%s/%d_ASD18.root",loca.Data(),RunNumber),"READ"); // Y1-Y1'
@@ -226,20 +228,20 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 
 
 	int minevt = 0;
-/*
-	int minip = 0;
-	int maxip = 10;
+	/*
+	   int minip = 0;
+	   int maxip = 10;
 
-	minip = 1;
-	maxip = 6;
+	   minip = 1;
+	   maxip = 6;
 
-	minip = -1;
-	maxip = 10;
+	   minip = -1;
+	   maxip = 10;
 
 
 	//int minip = 3;
 	//int maxip = 7; //8;
-*/
+	 */
 	double QDCCUT1 = 370; //300;
 	double QDCCUT2 = 290; //300;
 	double QDCCUT3 = 290; //300;
@@ -258,6 +260,12 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 	QDCCUT2 = 0;
 	QDCCUT3 = 0;
 	QDCCUT4 = 0;
+
+	// 20230330
+	double ped1 = 370;
+	double ped2 = 270;
+	double ped3 = 270;
+	double ped4 = 270;
 
 
 	//QDCCUT2 = 220;
@@ -309,38 +317,38 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 	diftime3 = 1890+110.0;
 	diftime4 = 1890+108.5;
 
-    // Carbon 200 MeV, run 3067, nocut v20230316, ip -1~10, only 1 hit per layer
-    diftime1 = 1890+100.2;
-    diftime2 = 1890+99.4;
-    diftime3 = 1890+110.4;
-    diftime4 = 1890+108.8;
+	// Carbon 200 MeV, run 3067, nocut v20230316, ip -1~10, only 1 hit per layer
+	diftime1 = 1890+100.2;
+	diftime2 = 1890+99.4;
+	diftime3 = 1890+110.4;
+	diftime4 = 1890+108.8;
 
 	// Proton 100 MeV, run 2043, nocut v20230320, ip -1~10, only 1 hit per layer
-    diftime1 = 1950+50.6;
-    diftime2 = 1950+50.0;
-    diftime3 = 1950+52.8;
-    diftime4 = 1950+51.7;
+	diftime1 = 1950+50.6;
+	diftime2 = 1950+50.0;
+	diftime3 = 1950+52.8;
+	diftime4 = 1950+51.7;
 
 	// Proton 100 MeV, run 2043, nocut v20230320, ip -1~10, only 1 hit per layer, t0 starting points
-    diftime1 = 1950+30;//26
-    diftime2 = 1950+30;//26
-    diftime3 = 1950+30;//28
+	diftime1 = 1950+30;//26
+	diftime2 = 1950+30;//26
+	diftime3 = 1950+30;//28
 	diftime4 = 1950+30;//22
 
-    // Carbon 200 MeV, run 3067, nocut v20230320, ip -1~10, only 1 hit per layer, t0 starting points
-    diftime1 = 1950+33;//
-    diftime2 = 1950+33;//
-    diftime3 = 1950+44;//or 42
-    diftime4 = 1950+41;//
+	// Carbon 200 MeV, run 3067, nocut v20230320, ip -1~10, only 1 hit per layer, t0 starting points
+	diftime1 = 1950+33;//
+	diftime2 = 1950+33;//
+	diftime3 = 1950+44;//or 42
+	diftime4 = 1950+41;//
 
-	 TFile* ift0 = new TFile("anaTimeZero_result.root","READ");
-    TH1D* ht0val = (TH1D*)ift0->Get("ht0val");
-    TH1D* ht1val = (TH1D*)ift0->Get("ht1val");
+	TFile* ift0 = new TFile("anaTimeZero_result.root","READ");
+	TH1D* ht0val = (TH1D*)ift0->Get("ht0val");
+	TH1D* ht1val = (TH1D*)ift0->Get("ht1val");
 
-    diftime1 = 1850 + ht0val->GetBinContent(1);
-    diftime2 = 1850 + ht0val->GetBinContent(2);
-    diftime3 = 1850 + ht0val->GetBinContent(3);
-    diftime4 = 1850 + ht0val->GetBinContent(4);
+	diftime1 = 1850 + ht0val->GetBinContent(1);
+	diftime2 = 1850 + ht0val->GetBinContent(2);
+	diftime3 = 1850 + ht0val->GetBinContent(3);
+	diftime4 = 1850 + ht0val->GetBinContent(4);
 
 
 	// Basic histogram
@@ -431,21 +439,21 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 	TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";time;time",100,0,100,100,0,100);
 	TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";time;time",100,0,100,100,0,100); // time2 vs time3
 
-/*
-	TH2D* TimeCorr11 = new TH2D("TimeCorr11",";time;time",300,0,300,300,0,300);
-	TH2D* TimeCorr21 = new TH2D("TimeCorr21",";time;time",300,0,300,300,0,300);
-	TH2D* TimeCorr31 = new TH2D("TimeCorr31",";time;time",300,0,300,300,0,300); // time2 vs time3
+	/*
+	   TH2D* TimeCorr11 = new TH2D("TimeCorr11",";time;time",300,0,300,300,0,300);
+	   TH2D* TimeCorr21 = new TH2D("TimeCorr21",";time;time",300,0,300,300,0,300);
+	   TH2D* TimeCorr31 = new TH2D("TimeCorr31",";time;time",300,0,300,300,0,300); // time2 vs time3
 
 
-	TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";time;time",300,0,300,300,0,300);
-	TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";time;time",300,0,300,300,0,300);
-	TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";time;time",300,0,300,300,0,300); // time2 vs time3
+	   TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";time;time",300,0,300,300,0,300);
+	   TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";time;time",300,0,300,300,0,300);
+	   TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";time;time",300,0,300,300,0,300); // time2 vs time3
 
 
-	TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";time;time",300,0,300,300,0,300);
-	TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";time;time",300,0,300,300,0,300);
-	TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";time;time",300,0,300,300,0,300); // time2 vs time3
-*/
+	   TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";time;time",300,0,300,300,0,300);
+	   TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";time;time",300,0,300,300,0,300);
+	   TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";time;time",300,0,300,300,0,300); // time2 vs time3
+	 */
 
 
 	TH1D* TimeMult1 = new TH1D("TimeMult1",";time1 * time2;Counts",900,0,9000);
@@ -478,6 +486,22 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 	TH2D* hChCorr32 = new TH2D("hChCorr32",";X;X'",32,0,32,32,0,32);
 	TH2D* hChCorr42 = new TH2D("hChCorr42",";Y;Y'",32,0,32,32,0,32);
 
+	TH1D* hChDist1 = new TH1D("hChDist1",";Ch at X1;Entries;",32,0,32);
+	TH1D* hChDist2 = new TH1D("hChDist2",";Ch at X1';Entries;",32,0,32);
+	TH1D* hChDist3 = new TH1D("hChDist3",";Ch at X2;Entries;",32,0,32);
+	TH1D* hChDist4 = new TH1D("hChDist4",";Ch at X2';Entries;",32,0,32);
+
+	TH1D* hDT1X1Ch[32];
+	TH1D* hDT1X2Ch[32];
+	TH1D* hDT2X1Ch[32];
+	TH1D* hDT2X2Ch[32];
+
+	for (int i=0;i<32;i++) {
+		hDT1X1Ch[i] = new TH1D(Form("hDT1X1Ch_%d",i),Form("hDT1X1Ch_%d;time (ns);Entries",i),300,0,300);
+		hDT1X2Ch[i] = new TH1D(Form("hDT1X2Ch_%d",i),Form("hDT1X2Ch_%d;time (ns);Entries",i),300,0,300);
+		hDT2X1Ch[i] = new TH1D(Form("hDT2X1Ch_%d",i),Form("hDT2X1Ch_%d;time (ns);Entries",i),300,0,300);
+		hDT2X2Ch[i] = new TH1D(Form("hDT2X2Ch_%d",i),Form("hDT2X2Ch_%d;time (ns);Entries",i),300,0,300);
+	}    
 
 	int maxevt = itr1->GetEntries();
 	//TFile *outfile = new TFile(Form("bdcTrackInfo_Run_%d_convertdata_v14.root",RunNumber),"RECREATE");
@@ -485,6 +509,8 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 
 
 	// TFile *outfile = new TFile("bdcTrackInfo_Data_Sejong_Cosmic_evt1000_20210616.root","RECREATE");
+	outfile->cd();
+
 	TTree *bdcTree = new TTree("bdcTree","BDC Data Tree");
 	const int nArr = 2000;//20000
 						  //const int nArr = itr2->GetEntries();
@@ -492,13 +518,14 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 	int numEvt = 0;
 	int nX11 = 0, nX12 = 0, nX21 = 0, nX22 = 0; // number of 2 D hits
 	int nY11 = 0, nY12 = 0, nY21 = 0, nY22 = 0; // number of 2 D hits
-	int Ch1X1[nArr] = {0}, Ch1X2[nArr] = {0}, Ch1Y1[nArr] = {0}, Ch1Y2[nArr] = {0}; // fired channel x, y at chamber 1
-	int Ch2X1[nArr] = {0}, Ch2X2[nArr] = {0}, Ch2Y1[nArr] = {0}, Ch2Y2[nArr] = {0}; // fired channel x, y at chamber 2
+	int Ch1X1[nArr] = {-1}, Ch1X2[nArr] = {-1}, Ch1Y1[nArr] = {-1}, Ch1Y2[nArr] = {-1}; // fired channel x, y at chamber 1
+	int Ch2X1[nArr] = {-1}, Ch2X2[nArr] = {-1}, Ch2Y1[nArr] = {-1}, Ch2Y2[nArr] = {-1}; // fired channel x, y at chamber 2
 	double DL1X1[nArr] = {0}, DL1X2[nArr] = {0}, DL1Y1[nArr] = {0}, DL1Y2[nArr] = {0}; // drift time at chamber 1
 	double DL2X1[nArr] = {0}, DL2X2[nArr] = {0}, DL2Y1[nArr] = {0}, DL2Y2[nArr] = {0}; // drift time at chamber 2
 	double DT1X1[nArr] = {0}, DT1X2[nArr] = {0}, DT1Y1[nArr] = {0}, DT1Y2[nArr] = {0}; // drift time at chamber 1
 	double DT2X1[nArr] = {0}, DT2X2[nArr] = {0}, DT2Y1[nArr] = {0}, DT2Y2[nArr] = {0}; // drift time at chamber 2
 
+	double QD1X1[nArr] = {0}, QD1X2[nArr] = {0}, QD2X1[nArr] = {0}, QD2X2[nArr] = {0}; // QDC at X1, X1', X2, X2'
 
 
 	bdcTree->Branch("numEvt",&numEvt,"numEvt/I");
@@ -539,6 +566,11 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 	bdcTree->Branch("DL2Y2",&DL2Y2,"DL2Y2[nY22]/D");
 	bdcTree->Branch("DT2Y1",&DT2Y1,"DT2Y1[nY21]/D");
 	bdcTree->Branch("DT2Y2",&DT2Y2,"DT2Y2[nY22]/D");
+
+	bdcTree->Branch("QD1X1",&QD1X1,"QD1X1[nX11]/D");
+	bdcTree->Branch("QD1X2",&QD1X2,"QD1X2[nX12]/D");
+	bdcTree->Branch("QD2X1",&QD2X1,"QD2X1[nX21]/D");
+	bdcTree->Branch("QD2X2",&QD2X2,"QD2X2[nX22]/D");
 
 	//maxevt = 20;
 
@@ -584,18 +616,21 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 		double maxQDC1_2 = 0;
 		///////////////////// Chamber1-XX' /////////////////////////////////////
 		//cout<< "ASD 16 X11-X12"<<endl;
-		for( int ip = 0; ip < nPoints1; ip++){
-			if(ip>minip && ip<maxip){
-				for( int ich = 0; ich < 64; ich++){
+		for( int ich = 0; ich < 64; ich++){
+			//			if (ich<2 || (ich>29 && ich<34) || ich>61) continue; 
+			bool isTDC=false;
+			for( int ip = 0; ip < nPoints1; ip++){
+				if(ip>minip && ip<maxip){
 					//if(ich == 0 || ich == 31 || ich == 32 || ich == 63) continue;
 					double tmpQDC=Data1[ip*128+ich];
 					unsigned short ftt1
 						= ((trigTime1 & 0xFF00 ) >> 8 )
 						+ ((trigTime1 & 0x007F ) << 8 );
 					if (tmpQDC > QDCCUT1){
-						//double time = (ftt1-(Data1[ip*128+64+ich]&0x7FFF));
 						double time = 4000+(-ftt1+(Data1[ip*128+64+ich]&0x7FFF));
-						if (time<0) time+=32768;
+						if ((time-4000)>0) time-=32768;
+						if (tdopt==2) {time = (ftt1-(Data1[ip*128+64+ich]&0x7FFF));
+						if (time<0) time+=32768;}
 						hisQDCCh1->Fill(ip,tmpQDC,ich);
 						hisQDC1->Fill(ip,tmpQDC);
 						if(Data1[ip*128+64+ich] > 0) hisTDCHit1->Fill(ich);
@@ -610,6 +645,7 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 								TimeDist1->Fill(DT1X1[cnt1_1]);
 								cout<<"Ch : "<<firedch1_1[cnt1_1]<<", DT1X1 : "<<DT1X1[cnt1_1]<<", DL1X1 : "<<DL1X1[cnt1_1]<<endl;
 								cnt1_1++;
+								isTDC=true;
 							}
 						}
 						if(ich >= 32 ) { 
@@ -625,11 +661,35 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 								TimeDist2->Fill(DT1X2[cnt1_2]);
 								cout<<"Ch : "<<firedch1_2[cnt1_2]<<", DT1X2 : "<<DT1X2[cnt1_2]<<", DL1X2 : "<<DL1X2[cnt1_2]<<endl;
 								cnt1_2++;
+								isTDC=true;
 							}
 						}
 					} // QCD cut
 				} // ip cut
 			} // ip 
+			if (isTDC) {
+				int cc=0;
+				if (ich<32) cc=cnt1_1-1;
+				if (ich>=32) cc=cnt1_2-1;
+				if (ievt<5) std::cout << "--- ievt : " << ievt << " - ich : " << ich << " -----" << cc << std::endl;
+				for (int ip=minip+1;ip<maxip;ip++) {
+					double corQDC=Data1[ip*128+ich];
+					if (pedopt==2) corQDC=Data1[ip*128+ich]-ped1;
+					else if (pedopt==1) {
+						if (Data1[ip*128+64+ich]>0) corQDC=Data1[ip*128+ich];
+						else corQDC=0;
+					}
+					if (ich<32) {
+						if (ip==minip+1) QD1X1[cc]=corQDC;
+						else QD1X1[cc] += corQDC;
+						if (ievt<5) std::cout << corQDC << " - " << QD1X1[cc] << std::endl;}
+					if (ich>=32) {
+						if (ip==minip+1) QD1X2[cc]=corQDC;
+						else QD1X2[cc]+= corQDC;
+						if (ievt<5) std::cout << corQDC << " - " << QD1X2[cc] << std::endl;}
+				}
+			}
+
 		}// ch
 		hChCorr1->Fill(Ch1X1[0],Ch1X2[0]);
 		//hChCorr1->Fill(Ch1X1[cnt1_1],Ch1X2[cnt1_2]);
@@ -651,9 +711,9 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 		double maxQDC2_2 = 0;
 		int cnt2_1 = 0;
 		int cnt2_2 = 0;
-		for( int ip = 0; ip < nPoints2; ip++){
-			if(ip>minip && ip<maxip){
-				for( int ich = 0; ich < 64; ich++){
+		for( int ich = 0; ich < 64; ich++){
+			for( int ip = 0; ip < nPoints2; ip++){
+				if(ip>minip && ip<maxip){
 					//if(ich == 0 || ich == 31 || ich == 32 || ich == 63) continue;
 					double tmpQDC=Data2[ip*128+ich];
 					unsigned short ftt2
@@ -719,9 +779,11 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 		double maxQDC3_2 = 0;
 		int cnt3_1 = 0;
 		int cnt3_2 = 0;
-		for( int ip = 0; ip < nPoints3; ip++){
-			if(ip>minip && ip<maxip){
-				for( int ich = 0; ich < 64; ich++){
+		for( int ich = 0; ich < 64; ich++){
+			//				if (ich<2 || (ich>29 && ich<34) || ich>61) continue; 
+			bool isTDC=false;
+			for( int ip = 0; ip < nPoints3; ip++){
+				if(ip>minip && ip<maxip){
 					//if(ich == 0 || ich == 31 || ich == 32 || ich == 63) continue;
 					double tmpQDC=Data3[ip*128+ich];
 					unsigned short ftt3
@@ -729,10 +791,10 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 						+ ((trigTime3 & 0x007F ) << 8 );
 
 					if (tmpQDC > QDCCUT3){
-						//double time = (ftt3 - (Data3[ip*128+64+ich]&0x7FFF));
 						double time = 4000+(-ftt3+(Data3[ip*128+64+ich]&0x7FFF));
-						if (time<0) time+=32768;
-						//hisTDC3->Fill(ip,ich,fabs(time));
+						if ((time-4000)>0) time-=32768;
+						if (tdopt==2) {time = (ftt3-(Data3[ip*128+64+ich]&0x7FFF));
+						if (time<0) time+=32768;}
 
 
 						hisQDCCh3->Fill(ip,tmpQDC,ich);
@@ -751,6 +813,7 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 								if(time3_1[cnt3_1] > 160) DL2X1[cnt3_1] = 2.5;
 								cout<<"Ch : "<<firedch3_1[cnt3_1]<<", DT2X1 : "<<DT2X1[cnt3_1]<<", DL2X1 : "<<DL2X1[cnt3_1]<<endl;
 								cnt3_1++;
+								isTDC=true;
 							}
 						}
 						// X'
@@ -767,11 +830,50 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 								if(time3_2[cnt3_2] > 160) DL2X2[cnt3_2] = 2.5;
 								cout<<"Ch : "<<firedch3_2[cnt3_2]<<", DT2X2 : "<<DT2X2[cnt3_2]<<", DL2X2 : "<<DL2X2[cnt3_2]<<endl;
 								cnt3_2++;
+								isTDC=true;
 							}
 						}
 					} // QDC cut
 				} // ip cut 
 			} // ip 
+			/*
+			   for (int icnt31=0;icnt31<cnt3_1;icnt31++) {
+			   for (int ip =0;ip<nPoints3;ip++) {
+			   double corQDC=Data3[ip*128+(31-Ch2X1[icnt31])]-ped3;
+			   QD2X1[icnt31] += corQDC;
+			   }//ip
+			   }//icnt31
+			   for (int icnt32=0;icnt32<cnt3_2;icnt32++) {
+			   for (int ip =0;ip<nPoints3;ip++) {
+			   double corQDC=Data3[ip*128+(63-Ch2X2[icnt32])]-ped3;
+			   QD2X2[icnt32] += corQDC;
+			   }//ip
+			   }//icnt32
+			 */
+			if (isTDC) {
+				int cc=0;
+				if (ich<32) cc=cnt3_1-1;
+				if (ich>=32) cc=cnt3_2-1;
+				if (ievt<5) std::cout << "--- ievt : " << ievt << " - ich : " << ich << " -----" << cc << std::endl;
+				for (int ip=minip+1;ip<maxip;ip++) {
+					double corQDC=Data3[ip*128+ich];
+					if (pedopt==2) corQDC=Data3[ip*128+ich]-ped3;
+					else if (pedopt==1) {
+						if (Data3[ip*128+64+ich]>0) corQDC=Data3[ip*128+ich];
+						else corQDC=0;
+					}
+					if (ich<32) {
+						if (ip==minip+1) QD2X1[cc]=corQDC;
+						else QD2X1[cc] += corQDC;
+						if (ievt<5) std::cout << corQDC << " - " << QD2X1[cc] << std::endl;}
+					if (ich>=32) {
+						if (ip==minip+1) QD2X2[cc]=corQDC;
+						else QD2X2[cc]+= corQDC;
+						if (ievt<5) std::cout << corQDC << " - " << QD2X2[cc] << std::endl;}
+				}
+			}
+
+
 		} // ch
 		hChCorr3->Fill(Ch2X1[0],Ch2X2[0]);
 		//hChCorr3->Fill(Ch2X1[cnt3_1],Ch2X2[cnt3_2]);
@@ -877,16 +979,18 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 			//nX11 = 1; nX12 = 1; nX21 = 1; nX22 = 1;
 			//cout<<"nX11 : "<<nX11<<", nX12 : "<<nX12<<", nX21 : "<<nX21<<", nX22 : "<<nX22<<endl;
 			//if (!(nX11==1 && nX12==1 && nX21==1 && nX22==1)) continue;
-                          if (runopt==0 || runopt==1 || runopt==2) {if (!(nX11==1 && nX12==1 && nX21==1 && nX22==1)) continue;}
-              if (runopt==1) {
-                  int datadiff1 = Ch1X2[0]-Ch1X1[0];
-                  int datadiff2 = Ch2X2[0]-Ch2X1[0];
-                 if (!(datadiff1==-1 || datadiff1==0)) continue;
-                 if (!(datadiff2==0 || datadiff2==1)) continue;
-                 }
-             else if (runopt==2) {
-                 if (!(13<=Ch1X1[0] && Ch1X1[0]<=17)) continue;
-             }
+			if (hitopt==1) {if (!(nX11==1 && nX12==1 && nX21==1 && nX22==1)) continue;}
+			if (chopt==1) {
+				int datadiff1 = Ch1X2[0]-Ch1X1[0];
+				int datadiff2 = Ch2X2[0]-Ch2X1[0];
+				int datadiff3 = Ch2X1[0]-Ch1X2[0];
+				if (!(datadiff1==1 || datadiff1==0)) continue;
+				if (!(datadiff2==0 || datadiff2==-1)) continue;
+				if (!(datadiff3==0 || datadiff3==-1)) continue;
+			}
+			if (centopt==2) {
+				if (!(13<=Ch1X1[0] && Ch1X1[0]<=17)) continue;
+			}
 			for(int i = 0; i < nX11; i++){
 				for(int j = 0; j < nX12; j++){
 					for(int k = 0; k < nX21; k++){
@@ -927,8 +1031,16 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 							TimeCorrR11->Fill(time11,time21+60);
 							TimeCorrR21->Fill(time31,time41+60);
 							TimeCorrR31->Fill(time2*1/sqrt(2)+time3*1/sqrt(2),-time2*1/sqrt(2)+time3*1/sqrt(2)+60);
+							hDT1X1Ch[Ch1X1[i]]->Fill(time1);
+							hDT1X2Ch[Ch1X2[j]]->Fill(time2);
+							hDT2X1Ch[Ch2X1[k]]->Fill(time3);
+							hDT2X2Ch[Ch2X2[l]]->Fill(time4);
 
-
+							hChDist1->Fill(Ch1X1[i]);
+							hChDist2->Fill(Ch1X2[j]);
+							hChDist3->Fill(Ch2X1[k]);
+							hChDist4->Fill(Ch2X2[l]);
+							std::cout << "@@@@@@@@@@@@@@@@@@@@@@@@@" << std::endl;
 							/*
 							   double time11 = time1*1/sqrt(2);
 							   double time21 = time2*1/sqrt(2);
@@ -947,54 +1059,54 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 			}
 		}
 
-
+		/*
 		//nY11 = 1; nY12 = 1; nY21 = 1; nY22 = 1;
 		if(nY11 > 0 && nY12 > 0 && nY21 > 0 && nY22 > 0) {
-			allfiredEvt3++;
-			nY11 = 1; nY12 = 1; nY21 = 1; nY22 = 1;
-			//cout<<"nY11 : "<<nY11<<", nY12 : "<<nY12<<", nY21 : "<<nY21<<", nY22 : "<<nY22<<endl;
-			for(int i = 0; i < nY11; i++){
-				for(int j = 0; j < nY12; j++){
-					for(int k = 0; k < nY21; k++){
-						for(int l = 0; l < nY22; l++){
-							double time1 = DT1Y1[i];
-							double time2 = DT1Y2[j];
-							double time3 = DT2Y1[k];
-							double time4 = DT2Y2[l];
-							if(time1 < 0 || time2 < 0 || time3 < 0 || time4 < 0) continue;
-							double tmax1 = time1 + time2;
-							double tmax2 = time3 + time4;
-							//if(tmax1>100) continue;
-							//if(tmax1<50) continue;
-							//if(tmax2>100) continue;
-							//if(tmax2<50) continue;
-							TimeDist12->Fill(time1);
-							TimeDist22->Fill(time2);
-							TimeDist32->Fill(time3);
-							TimeDist42->Fill(time4);
-							TimeCorr12->Fill(time1,time2);
-							TimeCorr22->Fill(time3,time4);
-							TimeCorr32->Fill(time2,time3);
-							TimeSum12->Fill(time1+time2);
-							TimeSum22->Fill(time2+time3);
-							TimeSum32->Fill(time3+time4);
-							TimeMax12->Fill((time1+time3)/2+time2);
-							TimeMax22->Fill((time2+time4)/2+time3);
-							double time11 = time1*1/sqrt(2) + time2*1/sqrt(2);
-							double time21 = -time1*1/sqrt(2) + time2*1/sqrt(2);
-							double time31 = time3*1/sqrt(2) + time4*1/sqrt(2);
-							double time41 = -time3*1/sqrt(2) + time4*1/sqrt(2);
-							TimeCorrR12->Fill(time11,time21+60);
-							TimeCorrR22->Fill(time31,time41+60);
-							DriftVel12->Fill(2.5/((time1+time3)/2+time2)*1000.0);
-							DriftVel22->Fill(2.5/((time2+time4)/2+time3)*1000.0);
-							allfiredEvt4++;
-						}
-					}
-				}
-			}
+		allfiredEvt3++;
+		nY11 = 1; nY12 = 1; nY21 = 1; nY22 = 1;
+		//cout<<"nY11 : "<<nY11<<", nY12 : "<<nY12<<", nY21 : "<<nY21<<", nY22 : "<<nY22<<endl;
+		for(int i = 0; i < nY11; i++){
+		for(int j = 0; j < nY12; j++){
+		for(int k = 0; k < nY21; k++){
+		for(int l = 0; l < nY22; l++){
+		double time1 = DT1Y1[i];
+		double time2 = DT1Y2[j];
+		double time3 = DT2Y1[k];
+		double time4 = DT2Y2[l];
+		if(time1 < 0 || time2 < 0 || time3 < 0 || time4 < 0) continue;
+		double tmax1 = time1 + time2;
+		double tmax2 = time3 + time4;
+		//if(tmax1>100) continue;
+		//if(tmax1<50) continue;
+		//if(tmax2>100) continue;
+		//if(tmax2<50) continue;
+		TimeDist12->Fill(time1);
+		TimeDist22->Fill(time2);
+		TimeDist32->Fill(time3);
+		TimeDist42->Fill(time4);
+		TimeCorr12->Fill(time1,time2);
+		TimeCorr22->Fill(time3,time4);
+		TimeCorr32->Fill(time2,time3);
+		TimeSum12->Fill(time1+time2);
+		TimeSum22->Fill(time2+time3);
+		TimeSum32->Fill(time3+time4);
+		TimeMax12->Fill((time1+time3)/2+time2);
+		TimeMax22->Fill((time2+time4)/2+time3);
+		double time11 = time1*1/sqrt(2) + time2*1/sqrt(2);
+		double time21 = -time1*1/sqrt(2) + time2*1/sqrt(2);
+		double time31 = time3*1/sqrt(2) + time4*1/sqrt(2);
+		double time41 = -time3*1/sqrt(2) + time4*1/sqrt(2);
+		TimeCorrR12->Fill(time11,time21+60);
+		TimeCorrR22->Fill(time31,time41+60);
+		DriftVel12->Fill(2.5/((time1+time3)/2+time2)*1000.0);
+		DriftVel22->Fill(2.5/((time2+time4)/2+time3)*1000.0);
+		allfiredEvt4++;
 		}
-
+		}
+		}
+		}
+		}
+		 */
 
 		cout<<"After nX11 : "<<nX11<<" nX12 : "<<nX12<<" nX21 : "<<nX21<<" nX22 : "<<nX22<<endl;
 		cout<<"After nY11 : "<<nY11<<" nY12 : "<<nY12<<" nY21 : "<<nY21<<" nY22 : "<<nY22<<endl;
@@ -1016,9 +1128,48 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 	cout<<" Number of events with all fired layers at Y : "<<allfiredEvt3<<endl;
 	cout<<" Number of events with all fired layers with positive time at Y: "<<allfiredEvt4<<endl;
 
+    gROOT->Macro("~/rootlogon.C");
+    //gStyle->SetOptStat(0);
+    //gStyle->SetOptTitle(0);
 
-	outfile->cd();
-	bdcTree->Write();
+    TimeDist11->SetLineColor(kBlue+1);
+	TimeDist21->SetLineColor(kRed+1);
+    TimeDist31->SetLineColor(kViolet+1);
+    TimeDist41->SetLineColor(kOrange+5);
+
+    TimeDist11->SetMarkerColor(kBlue+1);
+    TimeDist21->SetMarkerColor(kRed+1);
+    TimeDist31->SetMarkerColor(kViolet+1);
+    TimeDist41->SetMarkerColor(kOrange+5);
+
+    TimeDist11->SetMarkerStyle(20);
+    TimeDist21->SetMarkerStyle(24);
+    TimeDist31->SetMarkerStyle(25);
+    TimeDist41->SetMarkerStyle(32);
+
+    //auto lg1 = new TLegend(0.23,0.35,0.53,0.55);
+    auto lg1 = new TLegend(0.61,0.48,0.91,0.68);
+    lg1->SetBorderSize(0);
+    lg1->SetMargin(0.2);
+    lg1->AddEntry(TimeDist11,"X1","lp");
+    lg1->AddEntry(TimeDist21,"X1'","lp");
+    lg1->AddEntry(TimeDist31,"X2","lp");
+    lg1->AddEntry(TimeDist41,"X2'","lp");
+
+
+    TCanvas *c1 = new TCanvas("c1","",880, 800);
+    c1->cd();
+    TimeDist11->Draw("HIST E");
+    TimeDist21->Draw("HIST E same");
+    TimeDist31->Draw("HIST E same");
+    TimeDist41->Draw("HIST E same");
+
+    lg1->Draw("same");
+
+    c1->SaveAs("plot_time_distributions_aftert0cor.png");
+
+	//outfile->cd();
+	//bdcTree->Write();
 
 	TimeMult1->Write();
 
@@ -1092,6 +1243,18 @@ void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int ru
 	hisQDC4->Write();
 	hisQDCCh4->Write();
 	hisTDCHit4->Write();
+
+	hChDist1->Write();
+	hChDist2->Write();
+	hChDist3->Write();
+	hChDist4->Write();
+
+	for (int i=0;i<32;i++) {
+		hDT1X1Ch[i]->Write();
+		hDT1X2Ch[i]->Write();
+		hDT2X1Ch[i]->Write();
+		hDT2X2Ch[i]->Write();
+	}
 
 	outfile->Write();
 	outfile->Close();
