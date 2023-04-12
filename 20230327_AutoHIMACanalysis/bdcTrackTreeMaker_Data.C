@@ -27,11 +27,13 @@ const bool MAXQDC = false; //Find MaxQDC Hit which will be used to make reconstr
 //void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int runopt=0, int RunNumber=3067){
 //void bdcTrackTreeMaker_Data_v16(TString loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data", int minip=-1, int maxip=10, int runopt=1, int RunNumber=3067){
 void bdcTrackTreeMaker_Data(int locano=2, int minip=1, int maxip=7, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int pedopt=1,  int RunNumber=3067){
-
+/*
 	TString loca;
 	if (locano==1) loca="~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data";
 	else if (locano==2) loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data";
     else if (locano==3) loca="~/Research_2023/202304CosmicCNU/Data";
+*/
+	TString loca="___LOCA___";
 
 	TFile* itf1 = new TFile(Form("%s/%d_ASD16.root",loca.Data(),RunNumber),"READ"); // X1-X1'
 	TFile* itf2 = new TFile(Form("%s/%d_ASD18.root",loca.Data(),RunNumber),"READ"); // Y1-Y1'

@@ -22,11 +22,13 @@ using namespace std;
 const bool MAXQDC = false; 
 
 void bdcOrgTimeDist_Data(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int RunNumber=3067){
-
+/*
 	TString loca;
 	if (locano==1) loca="~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data";
 	else if (locano==2) loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data";
 	else if (locano==3) loca="~/Research_2023/202304CosmicCNU/Data";
+*/
+	TString loca="___LOCA___";
 
 	TFile *itf1 = new TFile(Form("%s/%d_ASD16.root",loca.Data(),RunNumber),"READ");
 	TFile *itf2 = new TFile(Form("%s/%d_ASD18.root",loca.Data(),RunNumber),"READ");
