@@ -2,8 +2,16 @@
 
 void findt0(int ch, TH1F* hTime, TH1D* ht0val, TH1D* ht1val);
 
+void findt0_v2(int ch, TH1F* hTime, TH1D* ht0val, TH1D* ht1val);
+
 
 void anaTimeZero(int t0opt=1){
+/*
+	//t0opt
+	=1 (default, from v20230412) : t0 from fitting(after automation code running, please check!), t1 is from the distribution
+	=2 from fitting
+	=3 from distribution (default before v20230412)
+*/
 	gROOT->Macro("~/rootlogon.C");
 	gStyle->SetOptStat(0);
 	gStyle->SetOptFit(0);
@@ -111,11 +119,25 @@ void anaTimeZero(int t0opt=1){
 		t0val=errf11->GetParameter(1);
 		t1val=errf12->GetParameter(1);
 	}
-	else if (t0opt==1) {
+	else if (t0opt==3) {
 		findt0(1,hTime1,ht0val,ht1val);
 		t0val=ht0val->GetBinContent(1);
 		t1val=ht1val->GetBinContent(1);
 	}
+	else {//t0opt==1
+		findt0_v2(1,hTime1,ht0val,ht1val);
+		hTime1->Fit(errf11,"rm");
+//		hTime1->Fit(errf12,"rm");
+		errf11->Draw("same");
+//		errf12->Draw("same");
+		ht0val->SetBinContent(1,errf11->GetParameter(1));
+//		ht1val->SetBinContent(1,errf12->GetParameter(1));
+
+		t0val=errf11->GetParameter(1);
+//		t1val=errf12->GetParameter(1);
+		t1val=ht1val->GetBinContent(1);	
+	}
+
 	TLine *lt0val1 = new TLine(t0val,0.0,t0val,hTime1->GetMaximum());
 	TLine *lt1val1 = new TLine(t1val,0.0,t1val,hTime1->GetMaximum());
 	lt0val1->SetLineColor(kTeal+3);
@@ -150,11 +172,25 @@ void anaTimeZero(int t0opt=1){
 		t0val=errf21->GetParameter(1);
 		t1val=errf22->GetParameter(1);
 	}
-	else if (t0opt==1) {
+	else if (t0opt==3) {
 		findt0(2,hTime2,ht0val,ht1val);
 		t0val=ht0val->GetBinContent(2);
 		t1val=ht1val->GetBinContent(2);
 	}
+	else {//t0opt==1
+		findt0_v2(2,hTime2,ht0val,ht1val);
+		hTime2->Fit(errf21,"rm");
+//		hTime2->Fit(errf22,"rm");
+		errf21->Draw("same");
+//		errf22->Draw("same");
+		ht0val->SetBinContent(2,errf21->GetParameter(1));
+//		ht1val->SetBinContent(2,errf22->GetParameter(1));
+
+		t0val=errf21->GetParameter(1);
+//		t1val=errf22->GetParameter(1);
+		t1val=ht1val->GetBinContent(2);	
+	}
+
 	TLine *lt0val2 = new TLine(t0val,0.0,t0val,hTime2->GetMaximum());
 	TLine *lt1val2 = new TLine(t1val,0.0,t1val,hTime2->GetMaximum());
 	lt0val2->SetLineColor(kTeal+3);
@@ -184,11 +220,25 @@ void anaTimeZero(int t0opt=1){
 		t0val=errf31->GetParameter(1);
 		t1val=errf32->GetParameter(1);
 	}
-	else if (t0opt==1) {
+	else if (t0opt==3) {
 		findt0(3,hTime3,ht0val,ht1val);
 		t0val=ht0val->GetBinContent(3);
 		t1val=ht1val->GetBinContent(3);
 	}
+	else {//t0opt==1
+		findt0_v2(3,hTime3,ht0val,ht1val);
+		hTime3->Fit(errf31,"rm");
+//		hTime3->Fit(errf32,"rm");
+		errf31->Draw("same");
+//		errf32->Draw("same");
+		ht0val->SetBinContent(3,errf31->GetParameter(1));
+//		ht1val->SetBinContent(3,errf32->GetParameter(1));
+
+		t0val=errf31->GetParameter(1);
+//		t1val=errf32->GetParameter(1);
+		t1val=ht1val->GetBinContent(3);	
+	}
+
 	TLine *lt0val3 = new TLine(t0val,0.0,t0val,hTime3->GetMaximum());
 	TLine *lt1val3 = new TLine(t1val,0.0,t1val,hTime3->GetMaximum());
 	lt0val3->SetLineColor(kTeal+3);
@@ -218,11 +268,25 @@ void anaTimeZero(int t0opt=1){
 		t0val=errf41->GetParameter(1);
 		t1val=errf42->GetParameter(1);
 	}
-	else if (t0opt==1) {
+	else if (t0opt==3) {
 		findt0(4,hTime4,ht0val,ht1val);
 		t0val=ht0val->GetBinContent(4);
 		t1val=ht1val->GetBinContent(4);
 	}
+	else {//t0opt==1
+		findt0_v2(4,hTime4,ht0val,ht1val);
+		hTime4->Fit(errf41,"rm");
+//		hTime4->Fit(errf42,"rm");
+		errf41->Draw("same");
+//		errf42->Draw("same");
+		ht0val->SetBinContent(4,errf41->GetParameter(1));
+//		ht1val->SetBinContent(4,errf42->GetParameter(1));
+
+		t0val=errf41->GetParameter(1);
+//		t1val=errf42->GetParameter(1);
+		t1val=ht1val->GetBinContent(4);	
+	}
+
 	TLine *lt0val4 = new TLine(t0val,0.0,t0val,hTime4->GetMaximum());
 	TLine *lt1val4 = new TLine(t1val,0.0,t1val,hTime4->GetMaximum());
 	lt0val4->SetLineColor(kTeal+3);
@@ -295,6 +359,35 @@ void findt0(int ch, TH1F* hTime, TH1D* ht0val, TH1D* ht1val) {
 	int t1bin=0;
 
 	double valimit=hTime->GetMaximum()*0.01;
+	for (int i=0;i<hTime->GetNbinsX();i++) {
+		double tmp = hTime->GetBinContent(i+1);
+		//std::cout << i << " - " << tmp << std::endl;
+		if (!ist0 && !ist1 && tmp>valimit) {ist0=true;t0bin=i;}
+		if (ist0 && !ist1) {
+			if (tmp<=valimit) {
+				if((i-t0bin)<=30) ist0=false;
+				else {ist1=true;t1bin=i-1;}
+			}
+		}
+		if (ist1 && tmp>valimit){
+			if((i-t1bin)<=10) ist1=false;
+		}		
+	}
+	std::cout << t0bin << " - " << t1bin << std::endl;
+
+	ht0val->SetBinContent(ch,t0bin);
+	ht1val->SetBinContent(ch,t1bin);
+
+}
+
+void findt0_v2(int ch, TH1F* hTime, TH1D* ht0val, TH1D* ht1val) {
+
+	bool ist0=false;
+	bool ist1=false;
+	int t0bin=0;
+	int t1bin=0;
+
+	double valimit=0.0;
 	for (int i=0;i<hTime->GetNbinsX();i++) {
 		double tmp = hTime->GetBinContent(i+1);
 		//std::cout << i << " - " << tmp << std::endl;

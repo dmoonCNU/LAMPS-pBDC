@@ -3,7 +3,9 @@ void anaAngle(){
     gStyle->SetOptStat(0);
     //gStyle->SetOptTitle(0);
     TFile *in1 = new TFile("bdcAnaTrack_Data_CNU_Cosmic_Run_getResolution_v16.root","READ");
-    TH1F *hAngX = (TH1F*)in1->Get("hAngX");
+	TFile* fin = new TFile("anaAngleResult.root","RECREATE");
+
+	TH1F *hAngX = (TH1F*)in1->Get("hAngX");
 
 //    hAngX->Rebin(4);
 
@@ -43,5 +45,8 @@ void anaAngle(){
 	std::cout << "Mean : " << hAngX->GetMean() << std::endl;
 	std::cout << "Sigma : " << hAngX->GetRMS() << std::endl;
 
-
+	fin->cd();
+	hAngX->Write();
+	gaus->Write();
+	fin->Close();
 }
