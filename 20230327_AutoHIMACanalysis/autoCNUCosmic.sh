@@ -46,6 +46,14 @@
 ###############################################################################
 ### Default option (with 1.5 sigma correlation and 1 sigma angle cut)
 
-./autoBDC.sh 7999 3 1111111 1 6 true true 1.5 1 -5 5 0 15 "r5" # 1 sigma
+./autoBDC.sh 7999 3 1111111 1 6 true true 1.5 -1 -5 5 0 15 "r5" # 1 sigma
 ###############################################################################
 
+### If you want to run with angleCut>0, please run with angleCut=0 like below first!
+
+###./autoBDC.sh 7999 3 1111111 1 6 true true 1.5 0 -5 5 0 15 "r5" # 1 sigma
+###./autoBDC.sh 7999 3 1111111 1 6 true true 1.5 1 -5 5 0 15 "r5" # 1 sigma
+
+
+#dir=CosmicCNU_Run${RunNumber}_opt${runopt}_ip${iprmk}_png${savepng}_cor${corr_}_nsig${nsigma}_ang${angleCut_}_w${minang}_${maxang}_lt${ltopt}CH${ltch}${rmk}
+#dire=CosmicCNU_Run${RunNumber}_opt${runopt}_ip${iprmk}_png${savepng}_cor${corr_}_nsig${nsigma}_ang0_w-5_5_lt0CH${ltch}${rmk}
