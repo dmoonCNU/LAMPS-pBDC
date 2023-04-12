@@ -149,7 +149,7 @@ echo step2 is done!!
 root -l -b -q ${ploc}/anaTimeZero.C"(${t0opt})" >& ${ploc}/log_step3
 echo step3 is done!!!!
 
-root -l -b -q ${ploc}/bdcTimeDist_Data.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${RunNumber})" >& ${ploc}/log_step4
+root -l -b -q ${ploc}/bdcTimeDist_Data.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${RunNumber},${ltopt},${ltch})" >& ${ploc}/log_step4
 echo step4 is done!!!!!!!!
 
 root -l -b -q ${ploc}/bdcTrackTreeMaker_Data.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${pedopt},${RunNumber})" >& ${ploc}/log_step5
