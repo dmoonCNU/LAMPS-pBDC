@@ -79,7 +79,8 @@ fi
 echo ${iprmk}
 
 #wdir=/Users/hyunchoryhome/Research_2023/202302HIMACBeamTest/LAMPS-pBDC-main_HIMAC/20230327_AutoHIMACanalysis
-wdir=/Users/hyunchoryhome/20230330/LAMPS-pBDC/20230327_AutoHIMACanalysis
+#wdir=/Users/hyunchoryhome/20230330/LAMPS-pBDC/20230327_AutoHIMACanalysis
+wdir=/Users/hyunchoryhome/Research_2023/pBDC/20230327_AutoHIMACanalysis
 
 protondir=${wdir}/Proton100MeV/
 carbondir=${wdir}/Carbon200MeV/
@@ -134,6 +135,8 @@ cp ../../*.sh ./
 #cp ../${dire}/anaAngleResult.root ./anaAngleResultang0.root
 
 ploc=${loc}${dir}
+
+sed -i '.bak' "s,___LOCA___,$loca,g" *.C
 
 root -l -b -q ${ploc}/bdcDrawAll_HIMAC.C"(${locano},${RunNumber},${QDCopt})" >& ${ploc}/log_step0
 echo step0 is done
