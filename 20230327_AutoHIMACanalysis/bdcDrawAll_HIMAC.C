@@ -51,12 +51,13 @@ void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 
 		//TFile* itf = new TFile(Form("%s/%d_ASD%d.root",loca.Data(),RunNo,ASDNo+16),"READ");
 
-		
+/*		
 		   TFile* itf;
 		   if (locano==1) itf = new TFile(Form("~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data/%d_ASD%d.root",RunNo,ASDNo+16),"READ");
 		   else if (locano==2) itf = new TFile(Form("~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data/%d_ASD%d.root",RunNo,ASDNo+16),"READ"); 
 		   else if (locano==3) itf = new TFile(Form("~/Research_2023/202304CosmicCNU/Data/%d_ASD%d.root",RunNo,ASDNo+16),"READ"); 
-		 
+*/
+		TFile* itf = new TFile(Form("___LOCA___/%d_ASD%d.root",RunNo,ASDNo+16),"READ");
 
 		TTree* itr = (TTree*)itf->Get("DataTree");
 		Int_t EventNum;
