@@ -136,39 +136,50 @@ cp ../../*.sh ./
 
 ploc=${loc}${dir}
 
-sed -i '.bak' "s,___LOCA___,$loca,g" *.C
+sed -i '.bak' -e "s,___LOCA___,$loca,g" -e "s,___RUNNUMBER___,$RunNumber,g" -e "s,___LOCANO___,$locano,g" -e "s,___QDCOPT___,$QDCopt,g" -e "s,___T0OPT___,$t0opt,g" -e "s,___TDOPT___,$tdopt,g" -e "s,___HITOPT___,$hitopt,g" -e "s,___CHOPT___,$chopt,g" -e "s,___CENTOPT___,$centopt,g" -e "s,___PEDOPT___,$pedopt,g" -e "s,___MINIP___,$minip,g" -e "s,___MAXIP___,$maxip,g" -e "s,___SAVEPNG___,$savepng,g" -e "s,___CORR___,$corr_,g" -e "s,___NSIGMA___,$nsigma,g" -e "s,___ANGLECUT___,$angleCut_,g" -e "s,___MINANG___,$minang,g" -e "s,___MAXANG___,$maxang,g" -e "s,___LTOPT___,$ltopt,g" -e "s,___LTCH___,$ltch,g" -e "s,___RMK___,$rmk,g" *.C
 
-root -l -b -q ${ploc}/bdcDrawAll_HIMAC.C"(${locano},${RunNumber},${QDCopt})" >& ${ploc}/log_step0
+
+#root -l -b -q ${ploc}/bdcDrawAll_HIMAC.C"(${locano},${RunNumber},${QDCopt})" >& ${ploc}/log_step0
+root -l -b -q ${ploc}/bdcDrawAll_HIMAC.C >& ${ploc}/log_step0
 echo step0 is done
-root -l -b -q ${ploc}/bdcOrgTimeDist_Data_ori.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${RunNumber})" >& ${ploc}/log_step1
+#root -l -b -q ${ploc}/bdcOrgTimeDist_Data_ori.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${RunNumber})" >& ${ploc}/log_step1
+root -l -b -q ${ploc}/bdcOrgTimeDist_Data_ori.C >& ${ploc}/log_step1
 echo step1 is done!
 
-root -l -b -q ${ploc}/bdcOrgTimeDist_Data.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${RunNumber})" >& ${ploc}/log_step2
+#root -l -b -q ${ploc}/bdcOrgTimeDist_Data.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${RunNumber})" >& ${ploc}/log_step2
+root -l -b -q ${ploc}/bdcOrgTimeDist_Data.C >& ${ploc}/log_step2
 echo step2 is done!!
 
-root -l -b -q ${ploc}/anaTimeZero.C"(${t0opt})" >& ${ploc}/log_step3
+#root -l -b -q ${ploc}/anaTimeZero.C"(${t0opt})" >& ${ploc}/log_step3
+root -l -b -q ${ploc}/anaTimeZero.C >& ${ploc}/log_step3
 echo step3 is done!!!!
 
-root -l -b -q ${ploc}/bdcTimeDist_Data.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${RunNumber},${ltopt},${ltch})" >& ${ploc}/log_step4
+#root -l -b -q ${ploc}/bdcTimeDist_Data.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${RunNumber},${ltopt},${ltch})" >& ${ploc}/log_step4
+root -l -b -q ${ploc}/bdcTimeDist_Data.C >& ${ploc}/log_step4
 echo step4 is done!!!!!!!!
 
-root -l -b -q ${ploc}/bdcTrackTreeMaker_Data.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${pedopt},${RunNumber})" >& ${ploc}/log_step5
+#root -l -b -q ${ploc}/bdcTrackTreeMaker_Data.C"(${locano},${minip},${maxip},${tdopt},${hitopt},${chopt},${centopt},${pedopt},${RunNumber})" >& ${ploc}/log_step5
+root -l -b -q ${ploc}/bdcTrackTreeMaker_Data.C >& ${ploc}/log_step5
 echo step5 is done!!!!!!!! !!!!!!!!
 
-root -l -b -q ${ploc}/anaCorr.C"(${nsigma})" >& ${ploc}/log_step6
+#root -l -b -q ${ploc}/anaCorr.C"(${nsigma})" >& ${ploc}/log_step6
+root -l -b -q ${ploc}/anaCorr.C >& ${ploc}/log_step6
 echo step6 is done!!!!!!!! !!!!!!!! !!!!!!!!
 
-root -l -b -q ${ploc}/bdcTrackFinderData_CNU_Cosmic_getResolution.C"(${savepng},${corr_},${nsigma},${angleCut_},${minang},${maxang})" >& ${ploc}/log_step7
+#root -l -b -q ${ploc}/bdcTrackFinderData_CNU_Cosmic_getResolution.C"(${savepng},${corr_},${nsigma},${angleCut_},${minang},${maxang})" >& ${ploc}/log_step7
+root -l -b -q ${ploc}/bdcTrackFinderData_CNU_Cosmic_getResolution.C >& ${ploc}/log_step7
 echo step7 is done!!!!!!!! !!!!!!!! !!!!!!!! !!!!!!!!
 
+#root -l -b -q ${ploc}/draw_Resolution.C >& ${ploc}/log_step8
 root -l -b -q ${ploc}/draw_Resolution.C >& ${ploc}/log_step8
 echo step8 is done!!!!!!!! !!!!!!!! !!!!!!!! !!!!!!!! !!!!!!!!
 
 grep=grep
 ${grep} "Resolution" ${ploc}/log_step8
 
+#root -l -b -q ${ploc}/anaAngle.C >& ${ploc}/log_step9
 root -l -b -q ${ploc}/anaAngle.C >& ${ploc}/log_step9
-echo step8 is done!!!!!!!! !!!!!!!! !!!!!!!! !!!!!!!! !!!!!!!! !!!!!!!!
+echo step9 is done!!!!!!!! !!!!!!!! !!!!!!!! !!!!!!!! !!!!!!!! !!!!!!!!
 
 ${grep} "Mean :" ${ploc}/log_step9
 ${grep} "Sigma :" ${ploc}/log_step9

@@ -26,7 +26,11 @@ const bool MAXQDC = false; //Find MaxQDC Hit which will be used to make reconstr
 //void bdcTrackTreeMaker_Data_v16(TString loc="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data", int RunNumber=3067){
 //void bdcTrackTreeMaker_Data_v16(int locano=2, int minip=-1, int maxip=10, int runopt=0, int RunNumber=3067){
 //void bdcTrackTreeMaker_Data_v16(TString loca="~/Research_2023/202302HIMACBeamTest/AllData/2_Carbon200MeV/Data", int minip=-1, int maxip=10, int runopt=1, int RunNumber=3067){
-void bdcTrackTreeMaker_Data(int locano=2, int minip=1, int maxip=7, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int pedopt=1,  int RunNumber=3067){
+//void bdcTrackTreeMaker_Data(int locano=2, int minip=1, int maxip=7, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int pedopt=1,  int RunNumber=3067){
+void bdcTrackTreeMaker_Data(int locano=___LOCANO___, int minip=___MINIP___, int maxip=___MAXIP___, int tdopt=___TDOPT___, int hitopt=___HITOPT___, int chopt=___CHOPT___, int centopt=___CENTOPT___, int pedopt=___PEDOPT___,  int RunNumber=___RUNNUMBER___){
+
+//sed -i '.bak' -e "s,___LOCA___,$loca,g" -e "s,___RUNNUMBER___,$RunNumber,g" -e "s,___LOCANO___,$locano,g" *.C -e "s,___QDCOPT___,$QDCopt,g" -e "s,___T0OPT___,$t0opt,g" -e "s,___TDOPT___,$tdopt,g" -e "s,___HITOPT___,$hitopt,g" -e "s,___CHOPT___,$chopt,g" -e "s,___CENTOPT___,$centopt,g" -e "s,___PEDOPT___,$pedopt,g" *.C -e "s,___MINIP___,$minip,g" -e "s,___MAXIP___,$maxip,g" -e "s,___SAVEPNG___,$savepng,g" -e "s,___CORR___,$corr_,g" -e "s,___NSIGMA___,$nsigma,g" -e "s,___ANGLECUT___,$angleCut_,g" -e "s,___MINANG___,$minang,g" -e "s,___MAXANG___,$maxang,g" -e "s,___LTOPT___,$ltopt,g" -e "s,___LTCH___,$ltch,g" -e "s,___RMK___,$rmk,g" *.C
+
 /*
 	TString loca;
 	if (locano==1) loca="~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data";
@@ -378,90 +382,89 @@ void bdcTrackTreeMaker_Data(int locano=2, int minip=1, int maxip=7, int tdopt=1,
 	TH3D* hisQDCCh4= new TH3D("hisQDCCh4","Ch;time;QDC",128,0,128,1000,0,1000,64,0,64);
 	TH1D* hisTDCHit4 = new TH1D("hisTDCHit4" ,"hisTDCHit;channel;Hit",64,0,64);
 
-	TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;time;Hit",200,0,200);
-	TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;time;Hit",200,0,200);
-	TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;time;Hit",200,0,200);
-	TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;time;Hit",200,0,200);
+	TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;Drift time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;Drift time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;Drift time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;Drift time (ns);Number of TDC hits/event",200,0,200);
 
-	TH1D* TimeSum11 = new TH1D("TimeSum11" ,"TimeSum11;time (ns);Counts",75,0,150);
-	TH1D* TimeSum21 = new TH1D("TimeSum21" ,"TimeSum21;time (ns);Counts",75,0,150);
-	TH1D* TimeSum31 = new TH1D("TimeSum31" ,"TimeSum31;time (ns);Counts",75,0,150);
-	TH1D* TimeSum41 = new TH1D("TimeSum41" ,"TimeSum41;time (ns);Counts",75,0,150);
+	TH1D* TimeSum11 = new TH1D("TimeSum11" ,"TimeSum11;Sum of drift time (ns);Number of TDC hits/event",75,0,150);
+	TH1D* TimeSum21 = new TH1D("TimeSum21" ,"TimeSum21;Sum of drift time (ns);Number of TDC hits/event",75,0,150);
+	TH1D* TimeSum31 = new TH1D("TimeSum31" ,"TimeSum31;Sum of drift time (ns);Number of TDC hits/event",75,0,150);
+	TH1D* TimeSum41 = new TH1D("TimeSum41" ,"TimeSum41;Sum of drift time (ns);Number of TDC hits/event",75,0,150);
 
+	TH1D* TimeSum12 = new TH1D("TimeSum12" ,"TimeSum12;Sum of drift time (ns);Number of TDC hits/event",75,0,150);
+	TH1D* TimeSum22 = new TH1D("TimeSum22" ,"TimeSum22;Sum of drift time (ns);Number of TDC hits/event",75,0,150);
+	TH1D* TimeSum32 = new TH1D("TimeSum32" ,"TimeSum32;Sum of drift time (ns);Number of TDC hits/event",75,0,150);
+	TH1D* TimeSum42 = new TH1D("TimeSum42" ,"TimeSum42;Sum of drift time (ns);Number of TDC hits/event",75,0,150);
 
-	TH1D* TimeSum12 = new TH1D("TimeSum12" ,"TimeSum12;time (ns);Counts",75,0,150);
-	TH1D* TimeSum22 = new TH1D("TimeSum22" ,"TimeSum22;time (ns);Counts",75,0,150);
-	TH1D* TimeSum32 = new TH1D("TimeSum32" ,"TimeSum32;time (ns);Counts",75,0,150);
-	TH1D* TimeSum42 = new TH1D("TimeSum42" ,"TimeSum42;time (ns);Counts",75,0,150);
+	TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;Drift time (ns);Number of TDC hits/event",300,0,300);
+	TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;Drift time (ns);Number of TDC hits/event",300,0,300);
+	TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;Drift time (ns);Number of TDC hits/event",300,0,300);
+	TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;Drift time (ns);Number of TDC hits/event",300,0,300);
 
-	TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;time (ns);Counts",300,0,300);
-	TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;time (ns);Counts",300,0,300);
-	TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;time (ns);Counts",300,0,300);
-	TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;time (ns);Counts",300,0,300);
-
-	TH1D* TimeMax11 = new TH1D("TimeMax11",";time;Counts",500,0,500);
-	TH1D* TimeMax21 = new TH1D("TimeMax21",";time;Counts",500,0,500);
+	TH1D* TimeMax11 = new TH1D("TimeMax11",";Max. time (ns);Number of TDC hits/event",500,0,500);
+	TH1D* TimeMax21 = new TH1D("TimeMax21",";Max. time (ns);Number of TDC hits/event",500,0,500);
 	TH1D* DriftVel11 = new TH1D("DriftVel11",";time;Counts",50,0,150);
 	TH1D* DriftVel21 = new TH1D("DriftVel21",";time;Counts",50,0,150);
 	/*
-	   TH2D* TimeCorr11 = new TH2D("TimeCorr11",";time;time",30,-20,100,30,-20,100);
-	   TH2D* TimeCorr21 = new TH2D("TimeCorr21",";time;time",30,-20,100,30,-20,100);
-	   TH2D* TimeCorr31 = new TH2D("TimeCorr31",";time;time",30,-20,100,30,-20,100); // time2 vs time3
+	   TH2D* TimeCorr11 = new TH2D("TimeCorr11",";Drift time(ns);Drift time(ns)",30,-20,100,30,-20,100);
+	   TH2D* TimeCorr21 = new TH2D("TimeCorr21",";Drift time(ns);Drift time(ns)",30,-20,100,30,-20,100);
+	   TH2D* TimeCorr31 = new TH2D("TimeCorr31",";Drift time(ns);Drift time(ns)",30,-20,100,30,-20,100); // time2 vs time3
 
 
-	   TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";time;time",30,0,120,30,0,120);
-	   TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";time;time",30,0,120,30,0,120);
-	   TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";time;time",30,0,120,30,0,120); // time2 vs time3
+	   TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";Drift time(ns);Drift time(ns)",30,0,120,30,0,120);
+	   TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";Drift time(ns);Drift time(ns)",30,0,120,30,0,120);
+	   TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";Drift time(ns);Drift time(ns)",30,0,120,30,0,120); // time2 vs time3
 
 
-	   TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";time;time",30,0,120,30,0,120);
-	   TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";time;time",30,0,120,30,0,120);
-	   TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";time;time",30,0,120,30,0,120); // time2 vs time3
+	   TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";Drift time(ns);Drift time(ns)",30,0,120,30,0,120);
+	   TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";Drift time(ns);Drift time(ns)",30,0,120,30,0,120);
+	   TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";Drift time(ns);Drift time(ns)",30,0,120,30,0,120); // time2 vs time3
 	 */
 	/*
-	   TH2D* TimeCorr11 = new TH2D("TimeCorr11",";time;time",120,-20,100,120,-20,100);
-	   TH2D* TimeCorr21 = new TH2D("TimeCorr21",";time;time",120,-20,100,120,-20,100);
-	   TH2D* TimeCorr31 = new TH2D("TimeCorr31",";time;time",120,-20,100,120,-20,100); // time2 vs time3
+	   TH2D* TimeCorr11 = new TH2D("TimeCorr11",";Drift time(ns);Drift time(ns)",120,-20,100,120,-20,100);
+	   TH2D* TimeCorr21 = new TH2D("TimeCorr21",";Drift time(ns);Drift time(ns)",120,-20,100,120,-20,100);
+	   TH2D* TimeCorr31 = new TH2D("TimeCorr31",";Drift time(ns);Drift time(ns)",120,-20,100,120,-20,100); // time2 vs time3
 
 
-	   TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";time;time",120,0,120,120,0,120);
-	   TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";time;time",120,0,120,120,0,120);
-	   TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";time;time",120,0,120,120,0,120); // time2 vs time3
+	   TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	   TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	   TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120); // time2 vs time3
 
 
-	   TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";time;time",120,0,120,120,0,120);
-	   TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";time;time",120,0,120,120,0,120);
-	   TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";time;time",120,0,120,120,0,120); // time2 vs time3
+	   TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	   TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	   TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120); // time2 vs time3
 	 */
 
-	TH2D* TimeCorr11 = new TH2D("TimeCorr11",";time;time",100,0,100,100,0,100);
-	TH2D* TimeCorr21 = new TH2D("TimeCorr21",";time;time",100,0,100,100,0,100);
-	TH2D* TimeCorr31 = new TH2D("TimeCorr31",";time;time",100,0,100,100,0,100); // time2 vs time3
+	TH2D* TimeCorr11 = new TH2D("TimeCorr11",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	TH2D* TimeCorr21 = new TH2D("TimeCorr21",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	TH2D* TimeCorr31 = new TH2D("TimeCorr31",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120); // time2 vs time3
 
 
-	TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";time;time",100,0,100,100,0,100);
-	TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";time;time",100,0,100,100,0,100);
-	TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";time;time",100,0,100,100,0,100); // time2 vs time3
+	TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120); // time2 vs time3
 
 
-	TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";time;time",100,0,100,100,0,100);
-	TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";time;time",100,0,100,100,0,100);
-	TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";time;time",100,0,100,100,0,100); // time2 vs time3
+	TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120);
+	TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";Drift time(ns);Drift time(ns)",120,0,120,120,0,120); // time2 vs time3
 
 	/*
-	   TH2D* TimeCorr11 = new TH2D("TimeCorr11",";time;time",300,0,300,300,0,300);
-	   TH2D* TimeCorr21 = new TH2D("TimeCorr21",";time;time",300,0,300,300,0,300);
-	   TH2D* TimeCorr31 = new TH2D("TimeCorr31",";time;time",300,0,300,300,0,300); // time2 vs time3
+	   TH2D* TimeCorr11 = new TH2D("TimeCorr11",";Drift time(ns);Drift time(ns)",300,0,300,300,0,300);
+	   TH2D* TimeCorr21 = new TH2D("TimeCorr21",";Drift time(ns);Drift time(ns)",300,0,300,300,0,300);
+	   TH2D* TimeCorr31 = new TH2D("TimeCorr31",";Drift time(ns);Drift time(ns)",300,0,300,300,0,300); // time2 vs time3
 
 
-	   TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";time;time",300,0,300,300,0,300);
-	   TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";time;time",300,0,300,300,0,300);
-	   TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";time;time",300,0,300,300,0,300); // time2 vs time3
+	   TH2D* TimeCorrR11 = new TH2D("TimeCorrR11",";Drift time(ns);Drift time(ns)",300,0,300,300,0,300);
+	   TH2D* TimeCorrR21 = new TH2D("TimeCorrR21",";Drift time(ns);Drift time(ns)",300,0,300,300,0,300);
+	   TH2D* TimeCorrR31 = new TH2D("TimeCorrR31",";Drift time(ns);Drift time(ns)",300,0,300,300,0,300); // time2 vs time3
 
 
-	   TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";time;time",300,0,300,300,0,300);
-	   TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";time;time",300,0,300,300,0,300);
-	   TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";time;time",300,0,300,300,0,300); // time2 vs time3
+	   TH2D* TimeCorrR12 = new TH2D("TimeCorrR12",";Drift time(ns);Drift time(ns)",300,0,300,300,0,300);
+	   TH2D* TimeCorrR22 = new TH2D("TimeCorrR22",";Drift time(ns);Drift time(ns)",300,0,300,300,0,300);
+	   TH2D* TimeCorrR32 = new TH2D("TimeCorrR32",";Drift time(ns);Drift time(ns)",300,0,300,300,0,300); // time2 vs time3
 	 */
 
 
@@ -472,23 +475,23 @@ void bdcTrackTreeMaker_Data(int locano=2, int minip=1, int maxip=7, int tdopt=1,
 	TH2D* hChCorr3 = new TH2D("hChCorr31",";X;X'",32,0,32,32,0,32);
 	TH2D* hChCorr4 = new TH2D("hChCorr41",";Y;Y'",32,0,32,32,0,32);
 
-	TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;time (ns);Counts",300,0,300);
-	TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;time (ns);Counts",300,0,300);
-	TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;time (ns);Counts",300,0,300);
-	TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;time (ns);Counts",300,0,300);
+	TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;Drift time (ns);Number of TDC hits/event",300,0,300);
+	TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;Drift time (ns);Number of TDC hits/event",300,0,300);
+	TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;Drift time (ns);Number of TDC hits/event",300,0,300);
+	TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;Drift time (ns);Number of TDC hits/event",300,0,300);
 
-	TH1D* TimeMax12 = new TH1D("TimeMax12",";time;Counts",500,0,500);
-	TH1D* TimeMax22 = new TH1D("TimeMax22",";time;Counts",500,0,500);
+	TH1D* TimeMax12 = new TH1D("TimeMax12",";Max. time (ns);Number of TDC hits/event",500,0,500);
+	TH1D* TimeMax22 = new TH1D("TimeMax22",";Max. time (ns);Number of TDC hits/event",500,0,500);
 	TH1D* DriftVel12 = new TH1D("DriftVel12",";time;Counts",50,0,150);
 	TH1D* DriftVel22 = new TH1D("DriftVel22",";time;Counts",50,0,150);
 	/*
-	   TH2D* TimeCorr12 = new TH2D("TimeCorr12",";time;time",30,-20,100,30,-20,100);
-	   TH2D* TimeCorr22 = new TH2D("TimeCorr22",";time;time",30,-20,100,30,-20,100);
-	   TH2D* TimeCorr32 = new TH2D("TimeCorr32",";time;time",30,-20,100,30,-20,100); // time2 vs time3
+	   TH2D* TimeCorr12 = new TH2D("TimeCorr12",";Drift time(ns);Drift time(ns)",30,-20,100,30,-20,100);
+	   TH2D* TimeCorr22 = new TH2D("TimeCorr22",";Drift time(ns);Drift time(ns)",30,-20,100,30,-20,100);
+	   TH2D* TimeCorr32 = new TH2D("TimeCorr32",";Drift time(ns);Drift time(ns)",30,-20,100,30,-20,100); // time2 vs time3
 	 */
-	TH2D* TimeCorr12 = new TH2D("TimeCorr12",";time;time",120,-20,100,120,-20,100);
-	TH2D* TimeCorr22 = new TH2D("TimeCorr22",";time;time",120,-20,100,120,-20,100);
-	TH2D* TimeCorr32 = new TH2D("TimeCorr32",";time;time",120,-20,100,120,-20,100); // time2 vs time3
+	TH2D* TimeCorr12 = new TH2D("TimeCorr12",";Drift time(ns);Drift time(ns)",120,-20,100,120,-20,100);
+	TH2D* TimeCorr22 = new TH2D("TimeCorr22",";Drift time(ns);Drift time(ns)",120,-20,100,120,-20,100);
+	TH2D* TimeCorr32 = new TH2D("TimeCorr32",";Drift time(ns);Drift time(ns)",120,-20,100,120,-20,100); // time2 vs time3
 
 	TH2D* hChCorr12 = new TH2D("hChCorr12",";X;X'",32,0,32,32,0,32);
 	TH2D* hChCorr22 = new TH2D("hChCorr22",";Y;Y'",32,0,32,32,0,32);
@@ -506,10 +509,10 @@ void bdcTrackTreeMaker_Data(int locano=2, int minip=1, int maxip=7, int tdopt=1,
 	TH1D* hDT2X2Ch[32];
 
 	for (int i=0;i<32;i++) {
-		hDT1X1Ch[i] = new TH1D(Form("hDT1X1Ch_%d",i),Form("hDT1X1Ch_%d;time (ns);Entries",i),300,0,300);
-		hDT1X2Ch[i] = new TH1D(Form("hDT1X2Ch_%d",i),Form("hDT1X2Ch_%d;time (ns);Entries",i),300,0,300);
-		hDT2X1Ch[i] = new TH1D(Form("hDT2X1Ch_%d",i),Form("hDT2X1Ch_%d;time (ns);Entries",i),300,0,300);
-		hDT2X2Ch[i] = new TH1D(Form("hDT2X2Ch_%d",i),Form("hDT2X2Ch_%d;time (ns);Entries",i),300,0,300);
+		hDT1X1Ch[i] = new TH1D(Form("hDT1X1Ch_%d",i),Form("hDT1X1Ch_%d;Drift time (ns);Entries",i),300,0,300);
+		hDT1X2Ch[i] = new TH1D(Form("hDT1X2Ch_%d",i),Form("hDT1X2Ch_%d;Drift time (ns);Entries",i),300,0,300);
+		hDT2X1Ch[i] = new TH1D(Form("hDT2X1Ch_%d",i),Form("hDT2X1Ch_%d;Drift time (ns);Entries",i),300,0,300);
+		hDT2X2Ch[i] = new TH1D(Form("hDT2X2Ch_%d",i),Form("hDT2X2Ch_%d;Drift time (ns);Entries",i),300,0,300);
 	}    
 
 	int maxevt = itr1->GetEntries();

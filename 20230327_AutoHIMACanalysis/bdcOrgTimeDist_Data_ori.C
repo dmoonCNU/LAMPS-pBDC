@@ -22,7 +22,11 @@ using namespace std;
 const bool MAXQDC = false; 
 
 //###void bdcOrgTimeDist_Data_v16_ori(int locano=2, int minip=-1, int maxip=10, int runopt=1, int RunNumber=3067){
-void bdcOrgTimeDist_Data_ori(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int RunNumber=3067){
+//void bdcOrgTimeDist_Data_ori(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int RunNumber=3067){
+
+void bdcOrgTimeDist_Data_ori(int locano=___LOCANO___, int minip=___MINIP___, int maxip=___MAXIP___, int tdopt=___TDOPT___, int hitopt=___HITOPT___, int chopt=___CHOPT___, int centopt=___CENTOPT___, int RunNumber=___RUNNUMBER___){
+
+//sed -i '.bak' -e "s,___LOCA___,$loca,g" -e "s,___RUNNUMBER___,$RunNumber,g" -e "s,___LOCANO___,$locano,g" *.C -e "s,___QDCOPT___,$QDCopt,g" -e "s,___T0OPT___,$t0opt,g" -e "s,___TDOPT___,$tdopt,g" -e "s,___HITOPT___,$hitopt,g" -e "s,___CHOPT___,$chopt,g" -e "s,___CENTOPT___,$centopt,g" -e "s,___PEDOPT___,$pedopt,g" *.C -e "s,___MINIP___,$minip,g" -e "s,___MAXIP___,$maxip,g" -e "s,___SAVEPNG___,$savepng,g" -e "s,___CORR___,$corr_,g" -e "s,___NSIGMA___,$nsigma,g" -e "s,___ANGLECUT___,$angleCut_,g" -e "s,___MINANG___,$minang,g" -e "s,___MAXANG___,$maxang,g" -e "s,___LTOPT___,$ltopt,g" -e "s,___LTCH___,$ltch,g" -e "s,___RMK___,$rmk,g" *.C
 
 /*	
 	   TString loca;
@@ -155,52 +159,52 @@ void bdcOrgTimeDist_Data_ori(int locano=2, int minip=-1, int maxip=10, int tdopt
 
 	// Basic histogram
 	/*
-	   TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;time;Hit",150,0,300);
-	   TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;time;Hit",150,0,300);
-	   TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;time;Hit",150,0,300);
-	   TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;time;Hit",150,0,300);
+	   TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",150,0,300);
+	   TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",150,0,300);
+	   TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",150,0,300);
+	   TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",150,0,300);
 
-	   TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;time;Hit",150,0,300);
-	   TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;time;Hit",150,0,300);
-	   TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;time;Hit",150,0,300);
-	   TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;time;Hit",150,0,300);
+	   TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",150,0,300);
+	   TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",150,0,300);
+	   TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",150,0,300);
+	   TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",150,0,300);
 
-	   TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;time;Hit",150,0,300);
-	   TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;time;Hit",150,0,300);
-	   TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;time;Hit",150,0,300);
-	   TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;time;Hit",150,0,300);
+	   TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",150,0,300);
+	   TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",150,0,300);
+	   TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",150,0,300);
+	   TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",150,0,300);
 	 */
 
-	TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;time;Hit",400,1800,2200);
-	TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;time;Hit",400,1800,2200);
-	TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;time;Hit",400,1800,2200);
-	TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;time;Hit",400,1800,2200);
+	TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
+	TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
+	TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
+	TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
 
-	TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;time;Hit",400,1800,2200);
-	TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;time;Hit",400,1800,2200);
-	TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;time;Hit",400,1800,2200);
-	TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;time;Hit",400,1800,2200);
+	TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
+	TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
+	TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
+	TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
 
-	TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;time;Hit",400,1800,2200);
-	TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;time;Hit",400,1800,2200);
-	TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;time;Hit",400,1800,2200);
-	TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;time;Hit",400,1800,2200);
+	TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
+	TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
+	TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
+	TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",400,1800,2200);
 
 	/*
-	   TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;time;Hit",32768,0,32768);
-	   TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;time;Hit",32768,0,32768);
-	   TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;time;Hit",32768,0,32768);
-	   TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;time;Hit",32768,0,32768);
+	   TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
+	   TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
+	   TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
+	   TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
 
-	   TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;time;Hit",32768,0,32768);
-	   TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;time;Hit",32768,0,32768);
-	   TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;time;Hit",32768,0,32768);
-	   TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;time;Hit",32768,0,32768);
+	   TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
+	   TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
+	   TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
+	   TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
 
-	   TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;time;Hit",32768,0,32768);
-	   TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;time;Hit",32768,0,32768);
-	   TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;time;Hit",32768,0,32768);
-	   TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;time;Hit",32768,0,32768);
+	   TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
+	   TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
+	   TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
+	   TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",32768,0,32768);
 	 */
 
 	int maxevt = itr4->GetEntries();

@@ -152,8 +152,10 @@ void trackFinderY2(float dataCh1Y1, float dataDl1Y1, float dataCh1Y2, float data
 
 // create Track tree to keep track information, gradient, intersection, event time
 // This version is CNU cosmic data analysis on 20221125
-void bdcTrackFinderData_CNU_Cosmic_getResolution(const bool savepng=true, bool corr_=true, double nsigma=1.5, int angleCut_=1, double minang=-0.467-1.0, double maxang=-0.467+1.0)
+//void bdcTrackFinderData_CNU_Cosmic_getResolution(const bool savepng=true, bool corr_=true, double nsigma=1.5, int angleCut_=1, double minang=-0.467-1.0, double maxang=-0.467+1.0)
+void bdcTrackFinderData_CNU_Cosmic_getResolution(const bool savepng=___SAVEPNG___, bool corr_=___CORR___, double nsigma=___NSIGMA___, int angleCut_=___ANGLECUT___, double minang=___MINANG___, double maxang=___MAXANG___)
 {
+//sed -i '.bak' -e "s,___LOCA___,$loca,g" -e "s,___RUNNUMBER___,$RunNumber,g" -e "s,___LOCANO___,$locano,g" *.C -e "s,___QDCOPT___,$QDCopt,g" -e "s,___T0OPT___,$t0opt,g" -e "s,___TDOPT___,$tdopt,g" -e "s,___HITOPT___,$hitopt,g" -e "s,___CHOPT___,$chopt,g" -e "s,___CENTOPT___,$centopt,g" -e "s,___PEDOPT___,$pedopt,g" *.C -e "s,___MINIP___,$minip,g" -e "s,___MAXIP___,$maxip,g" -e "s,___SAVEPNG___,$savepng,g" -e "s,___CORR___,$corr_,g" -e "s,___NSIGMA___,$nsigma,g" -e "s,___ANGLECUT___,$angleCut_,g" -e "s,___MINANG___,$minang,g" -e "s,___MAXANG___,$maxang,g" -e "s,___LTOPT___,$ltopt,g" -e "s,___LTCH___,$ltch,g" -e "s,___RMK___,$rmk,g" *.C
 
 	gROOT->Macro("~/rootlogon.C");
 	gStyle->SetPadLeftMargin(0.05);

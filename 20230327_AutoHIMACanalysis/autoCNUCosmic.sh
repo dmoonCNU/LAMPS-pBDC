@@ -34,10 +34,11 @@
 #		minang=ang0mean-angleCut_*ang0RMS;
 #		maxang=ang0mean+angleCut_*ang0RMS;
 
-#ltopt in bdcTimeDist_Data_v17_iter.C
+#ltopt in bdcTimeDist_Data.C
 #    if (ltopt==1) {ltch=13~17, ltch, ltch+1, ltch, ltch
 #    else if (ltopt==2) {ltch=13~17, ltch, ltch, ltch, ltch-1
-#    else {//ltopt=0, select ltch and ltopt with minimum chisquare
+#    else if (ltopt==0) {select ltch and ltopt with minimum chisquare
+#	 else (ltopt==3) {use inclusive one(sum of all lt functions among all of the channels(0-31)
 
 #ltch
 
@@ -46,7 +47,7 @@
 ###############################################################################
 ### Default option (with 1.5 sigma correlation and 1 sigma angle cut)
 
-./autoBDC.sh 7999 3 1111111 1 6 true true 1.5 -1 -5 5 0 15 "r5" # 1 sigma
+#./autoBDC.sh 7999 3 1111111 1 6 true true 1.5 -1 -5 5 0 15 "r5" # 1 sigma
 ###############################################################################
 
 ### If you want to run with angleCut>0, please run with angleCut=0 like below first!
@@ -54,6 +55,62 @@
 ###./autoBDC.sh 7999 3 1111111 1 6 true true 1.5 0 -5 5 0 15 "r5" # 1 sigma
 ###./autoBDC.sh 7999 3 1111111 1 6 true true 1.5 1 -5 5 0 15 "r5" # 1 sigma
 
+#./autoBDC.sh 7999 3 1111111 1 6 false true 1.5 -1 -5 5 0 15 "r6" # 7017-7019
+#./autoBDC.sh 7999 3 1111111 1 6 false true 1.5 -1 -5 5 0 15 "r7" # 7017-7020
 
-#dir=CosmicCNU_Run${RunNumber}_opt${runopt}_ip${iprmk}_png${savepng}_cor${corr_}_nsig${nsigma}_ang${angleCut_}_w${minang}_${maxang}_lt${ltopt}CH${ltch}${rmk}
-#dire=CosmicCNU_Run${RunNumber}_opt${runopt}_ip${iprmk}_png${savepng}_cor${corr_}_nsig${nsigma}_ang0_w-5_5_lt0CH${ltch}${rmk}
+#./autoBDC.sh 7999 3 1111111 1 6 false true 1.5 -1 -2 2 0 15 "r7" # 7017-7020
+#./autoBDC.sh 7999 3 1111111 1 6 false true 1.5 -1 -0.74 0.26 0 15 "r7" # 7017-7020
+#./autoBDC.sh 7999 3 1111111 1 6 false true 1.5 0 -5 5 0 15 "r7" # 7017-7020
+#./autoBDC.sh 7999 3 1111111 1 6 false true 1.0 0 -5 5 0 15 "r7" # 7017-7020
+#./autoBDC.sh 7999 3 1111111 1 6 false true 0.5 0 -5 5 0 15 "r7" # 7017-7020
+#./autoBDC.sh 7999 3 1111111 1 6 false true 0.5 1 -5 5 0 15 "r7" # 7017-7020
+
+#./autoBDC.sh 7999 3 1111121 1 6 false false 0.5 0 -5 5 0 15 "r8" # 7017-7020
+#./autoBDC.sh 7999 3 1111121 1 6 false false 0.5 0 -5 5 0 15 "r9" # 7017-7020
+#./autoBDC.sh 7999 3 1111111 1 6 false false 0.5 0 -5 5 0 15 "r9" # 7017-7020
+
+
+#./autoBDC.sh 7999 3 1111111 1 6 false false 0.5 0 -5 5 0 15 "r10" # 7017-7020
+
+#./autoBDC.sh 7024 3 1111111 1 6 false false 1.0 0 -5 5 0 15 "r11" # 7017-7020
+
+#./autoBDC.sh 7910 3 1111111 1 6 false true 1.0 0 -5 5 3 15 "r12" # 7024-7025
+#./autoBDC.sh 7910 3 1111111 2 6 false true 1.0 0 -5 5 3 15 "r12" # 7024-7025
+#./autoBDC.sh 7910 3 1111111 2 6 false true 1.0 -1 -5 5 3 15 "r12" # 7024-7025
+
+#./autoBDC.sh 7910 3 1111111 2 6 false true 1.0 -1 -5 5 3 15 "r13" # 7024-7025
+
+#./autoBDC.sh 7910 3 1111111 2 6 false true 1.0 -1 -5 5 3 15 "r14" # 7024-7026
+#./autoBDC.sh 7910 3 1111111 2 6 false true 1.0 -1 -5 5 3 15 "r15" # 7024-7031
+#./autoBDC.sh 7910 3 1111111 2 6 false true 1.0 -1 -5 5 3 15 "r16" # 7024-7032
+
+
+#./autoBDC.sh 7910 3 1111111 2 6 false true 1.0 -1 -5 5 3 15 "r17" # 7024-7032
+
+#./autoBDC.sh 7038 3 1111111 2 6 false true 1.0 -1 -5 5 3 15 "r17" # 7024-7032
+#./autoBDC.sh 6000 3 1111111 1 6 false false 1.0 0 -5 5 0 15 "r12" # 7017-7020
+
+#./autoBDC.sh 6000 3 1111111 2 6 false false 1.0 0 -5 5 0 15 "r18" # 7017-7020
+#./autoBDC.sh 7038 3 1111111 0 4 false false 1.0 0 -5 5 0 15 "r18" # 7017-7020
+#./autoBDC.sh 7038 3 1111111 2 6 false false 1.0 0 -5 5 0 15 "r18" # 7017-7020
+
+#./autoBDC.sh 7038 3 1111111 0 8 false false 1.0 0 -5 5 0 15 "r18" # 7017-7020
+#./autoBDC.sh 7038 3 1111111 -1 10 false true 1.0 0 -5 5 0 15 "r18" # 7017-7020
+
+
+#./autoBDC.sh 7038 3 1111111 2 6 false true 1.0 0 -5 5 0 15 "r18" # 7017-7020
+
+#./autoBDC.sh 7038 3 1111111 1 5 false true 1.0 0 -5 5 0 15 "r18" # 7017-7020
+
+#./autoBDC.sh 7910 3 1111111 1 5 false true 1.0 -1 -5 5 3 15 "r18" # 7024-7032
+
+./autoBDC.sh 7910 3 1111111 0 4 false true 1.0 -1 -5 5 3 15 "r19" # 7024-7032
+./autoBDC.sh 7910 3 1111111 0 5 false true 1.0 -1 -5 5 3 15 "r19" # 7024-7032
+./autoBDC.sh 7910 3 1111111 0 6 false true 1.0 -1 -5 5 3 15 "r19" # 7024-7032
+./autoBDC.sh 7910 3 1111111 2 6 false true 1.0 -1 -5 5 3 15 "r19" # 7024-7032
+./autoBDC.sh 7910 3 1111111 1 5 false true 1.0 -1 -5 5 3 15 "r19" # 7024-7032
+
+
+
+
+

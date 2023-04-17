@@ -4,14 +4,15 @@ void findt0(int ch, TH1F* hTime, TH1D* ht0val, TH1D* ht1val);
 
 void findt0_v2(int ch, TH1F* hTime, TH1D* ht0val, TH1D* ht1val);
 
+void findt0_v3(int ch, TH1F* hTime, TH1D* ht0val, TH1D* ht1val, double t0val);
 
-void anaTimeZero(int t0opt=1){
-/*
+void anaTimeZero(int locano=___LOCANO___, int t0opt=___T0OPT___){
+	/*
 	//t0opt
 	=1 (default, from v20230412) : t0 from fitting(after automation code running, please check!), t1 is from the distribution
 	=2 from fitting
 	=3 from distribution (default before v20230412)
-*/
+	 */
 	gROOT->Macro("~/rootlogon.C");
 	gStyle->SetOptStat(0);
 	gStyle->SetOptFit(0);
@@ -22,12 +23,15 @@ void anaTimeZero(int t0opt=1){
 	TH1F *hTime2 = (TH1F*)in1->Get("TimeDist21");
 	TH1F *hTime3 = (TH1F*)in1->Get("TimeDist31");
 	TH1F *hTime4 = (TH1F*)in1->Get("TimeDist41");
-	/*
-	   hTime1->Rebin(2);
-	   hTime2->Rebin(2);
-	   hTime3->Rebin(2);
-	   hTime4->Rebin(2);
-	 */
+
+	hTime1->Rebin(2);
+	hTime2->Rebin(2);
+	hTime3->Rebin(2);
+	hTime4->Rebin(2);
+
+	hTime1->GetXaxis()->SetTitle("TDC Time (ns)");
+	hTime1->GetYaxis()->SetTitle("Number of TDC hits/event");
+
 	//hTime1->GetXaxis()->SetRangeUser(0,100);
 	//hTime1->GetXaxis()->SetRangeUser(150,350);
 
@@ -59,6 +63,11 @@ void anaTimeZero(int t0opt=1){
 	TH1D* ht0val = new TH1D("ht0val","",4,0,4);
 	TH1D* ht1val = new TH1D("ht1val","",4,0,4);
 
+	double f1r0=35;
+	double f1r1=70;
+	double f2r0=100;
+	double f2r1=140;
+/*
 	TF1 *errf11 = new TF1("errf11","[0]*TMath::Erf((x-[1])/[2])+[3]",35,70);
 	TF1 *errf12 = new TF1("errf12","[0]*TMath::Erf((x-[1])/[2])+[3]",100,140);
 	errf11->SetParameters(20,50,10,10);
@@ -81,6 +90,30 @@ void anaTimeZero(int t0opt=1){
 	TF1 *errf42 = new TF1("errf42","[0]*TMath::Erf((x-[1])/[2])+[3]",90,140);
 	errf41->SetParameters(20,50,10,10);
 	errf42->SetParameters(-20,130,10,10);
+*/
+
+	TF1 *errf11 = new TF1("errf11","[0]*TMath::Erf((x-[1])/[2])+[3]",60,100);
+	TF1 *errf12 = new TF1("errf12","[0]*TMath::Erf((x-[1])/[2])+[3]",150,200);
+	errf11->SetParameters(20,80,10,10);
+	errf12->SetParameters(-20,170,10,10);
+
+
+	TF1 *errf21 = new TF1("errf21","[0]*TMath::Erf((x-[1])/[2])+[3]",60,100);
+	TF1 *errf22 = new TF1("errf22","[0]*TMath::Erf((x-[1])/[2])+[3]",150,200);
+	errf21->SetParameters(20,80,10,10);
+	errf22->SetParameters(-20,170,10,10);
+
+
+	TF1 *errf31 = new TF1("errf31","[0]*TMath::Erf((x-[1])/[2])+[3]",60,90);
+	TF1 *errf32 = new TF1("errf32","[0]*TMath::Erf((x-[1])/[2])+[3]",150,200);
+	errf31->SetParameters(20,85,10,10);
+	errf32->SetParameters(-20,170,10,10);
+
+
+	TF1 *errf41 = new TF1("errf41","[0]*TMath::Erf((x-[1])/[2])+[3]",60,100);
+	TF1 *errf42 = new TF1("errf42","[0]*TMath::Erf((x-[1])/[2])+[3]",150,200);
+	errf41->SetParameters(20,80,10,10);
+	errf42->SetParameters(-20,170,10,10);
 
 	errf11->SetLineColor(kRed);
 	errf11->SetLineWidth(2);
@@ -125,17 +158,17 @@ void anaTimeZero(int t0opt=1){
 		t1val=ht1val->GetBinContent(1);
 	}
 	else {//t0opt==1
-		findt0_v2(1,hTime1,ht0val,ht1val);
 		hTime1->Fit(errf11,"rm");
-//		hTime1->Fit(errf12,"rm");
+		//		hTime1->Fit(errf12,"rm");
 		errf11->Draw("same");
-//		errf12->Draw("same");
+		//		errf12->Draw("same");
 		ht0val->SetBinContent(1,errf11->GetParameter(1));
-//		ht1val->SetBinContent(1,errf12->GetParameter(1));
+		//		ht1val->SetBinContent(1,errf12->GetParameter(1));
 
 		t0val=errf11->GetParameter(1);
-//		t1val=errf12->GetParameter(1);
-		t1val=ht1val->GetBinContent(1);	
+		//		t1val=errf12->GetParameter(1);
+		findt0_v3(1,hTime1,ht0val,ht1val, t0val);
+	t1val=ht1val->GetBinContent(1);	
 	}
 
 	TLine *lt0val1 = new TLine(t0val,0.0,t0val,hTime1->GetMaximum());
@@ -178,16 +211,17 @@ void anaTimeZero(int t0opt=1){
 		t1val=ht1val->GetBinContent(2);
 	}
 	else {//t0opt==1
-		findt0_v2(2,hTime2,ht0val,ht1val);
+		//findt0_v2(2,hTime2,ht0val,ht1val);
 		hTime2->Fit(errf21,"rm");
-//		hTime2->Fit(errf22,"rm");
+		//		hTime2->Fit(errf22,"rm");
 		errf21->Draw("same");
-//		errf22->Draw("same");
+		//		errf22->Draw("same");
 		ht0val->SetBinContent(2,errf21->GetParameter(1));
-//		ht1val->SetBinContent(2,errf22->GetParameter(1));
+		//		ht1val->SetBinContent(2,errf22->GetParameter(1));
 
 		t0val=errf21->GetParameter(1);
-//		t1val=errf22->GetParameter(1);
+		//		t1val=errf22->GetParameter(1);
+		findt0_v3(2,hTime2,ht0val,ht1val, t0val);
 		t1val=ht1val->GetBinContent(2);	
 	}
 
@@ -226,16 +260,17 @@ void anaTimeZero(int t0opt=1){
 		t1val=ht1val->GetBinContent(3);
 	}
 	else {//t0opt==1
-		findt0_v2(3,hTime3,ht0val,ht1val);
+		//findt0_v2(3,hTime3,ht0val,ht1val);
 		hTime3->Fit(errf31,"rm");
-//		hTime3->Fit(errf32,"rm");
+		//		hTime3->Fit(errf32,"rm");
 		errf31->Draw("same");
-//		errf32->Draw("same");
+		//		errf32->Draw("same");
 		ht0val->SetBinContent(3,errf31->GetParameter(1));
-//		ht1val->SetBinContent(3,errf32->GetParameter(1));
+		//		ht1val->SetBinContent(3,errf32->GetParameter(1));
 
 		t0val=errf31->GetParameter(1);
-//		t1val=errf32->GetParameter(1);
+		//		t1val=errf32->GetParameter(1);
+		findt0_v3(3,hTime3,ht0val,ht1val, t0val);
 		t1val=ht1val->GetBinContent(3);	
 	}
 
@@ -274,16 +309,17 @@ void anaTimeZero(int t0opt=1){
 		t1val=ht1val->GetBinContent(4);
 	}
 	else {//t0opt==1
-		findt0_v2(4,hTime4,ht0val,ht1val);
+		//findt0_v2(4,hTime4,ht0val,ht1val);
 		hTime4->Fit(errf41,"rm");
-//		hTime4->Fit(errf42,"rm");
+		//		hTime4->Fit(errf42,"rm");
 		errf41->Draw("same");
-//		errf42->Draw("same");
+		//		errf42->Draw("same");
 		ht0val->SetBinContent(4,errf41->GetParameter(1));
-//		ht1val->SetBinContent(4,errf42->GetParameter(1));
+		//		ht1val->SetBinContent(4,errf42->GetParameter(1));
 
 		t0val=errf41->GetParameter(1);
-//		t1val=errf42->GetParameter(1);
+		//		t1val=errf42->GetParameter(1);
+		findt0_v3(4,hTime4,ht0val,ht1val, t0val);
 		t1val=ht1val->GetBinContent(4);	
 	}
 
@@ -406,5 +442,31 @@ void findt0_v2(int ch, TH1F* hTime, TH1D* ht0val, TH1D* ht1val) {
 
 	ht0val->SetBinContent(ch,t0bin);
 	ht1val->SetBinContent(ch,t1bin);
+
+}
+
+void findt0_v3(int ch, TH1F* hTime, TH1D* ht0val, TH1D* ht1val, double t0val) {
+
+	bool ist1=false;
+	int t1bin=0;
+
+	double valimit=0.0;
+	for (int i=0;i<hTime->GetNbinsX();i++) {
+		if (i*2<t0val) continue;
+		double tmp = hTime->GetBinContent(i+1);
+		//std::cout << i << " - " << tmp << std::endl;
+		if (!ist1) {
+			if (tmp<=valimit) {
+				if((i*2-t0val)<=30) {}
+				else {ist1=true;t1bin=i-1;}
+			}
+		}
+		if (ist1 && tmp>valimit){
+			if((i-t1bin)<=10) ist1=false;
+		}
+	}
+	std::cout << t0val << " - " << t1bin << std::endl;
+
+	ht1val->SetBinContent(ch,t1bin*2);
 
 }

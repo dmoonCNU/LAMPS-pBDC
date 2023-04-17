@@ -21,7 +21,11 @@ using namespace std;
 
 const bool MAXQDC = false; 
 
-void bdcTimeDist_Data(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int RunNumber=3067, int ltopt=1, int ltch=15){
+//void bdcTimeDist_Data(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int hitopt=1, int chopt=1, int centopt=1, int RunNumber=3067, int ltopt=1, int ltch=15){
+void bdcTimeDist_Data(int locano=___LOCANO___, int minip=___MINIP___, int maxip=___MAXIP___, int tdopt=___TDOPT___, int hitopt=___HITOPT___, int chopt=___CHOPT___, int centopt=___CENTOPT___, int RunNumber=___RUNNUMBER___, int ltopt=___LTOPT___, int ltch=___LTCH___){
+
+//sed -i '.bak' -e "s,___LOCA___,$loca,g" -e "s,___RUNNUMBER___,$RunNumber,g" -e "s,___LOCANO___,$locano,g" *.C -e "s,___QDCOPT___,$QDCopt,g" -e "s,___T0OPT___,$t0opt,g" -e "s,___TDOPT___,$tdopt,g" -e "s,___HITOPT___,$hitopt,g" -e "s,___CHOPT___,$chopt,g" -e "s,___CENTOPT___,$centopt,g" -e "s,___PEDOPT___,$pedopt,g" *.C -e "s,___MINIP___,$minip,g" -e "s,___MAXIP___,$maxip,g" -e "s,___SAVEPNG___,$savepng,g" -e "s,___CORR___,$corr_,g" -e "s,___NSIGMA___,$nsigma,g" -e "s,___ANGLECUT___,$angleCut_,g" -e "s,___MINANG___,$minang,g" -e "s,___MAXANG___,$maxang,g" -e "s,___LTOPT___,$ltopt,g" -e "s,___LTCH___,$ltch,g" -e "s,___RMK___,$rmk,g" *.C
+
 /*
 	TString loca;
 	if (locano==1) loca="~/Research_2023/202302HIMACBeamTest/AllData/1_Proton100MeV/Data";
@@ -367,16 +371,16 @@ void bdcTimeDist_Data(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int
 	TH3D* hisQDCCh4= new TH3D("hisQDCCh4","Ch;time;QDC",128,0,128,1000,0,1000,64,0,64);
 	TH1D* hisTDCHit4 = new TH1D("hisTDCHit4" ,"hisTDCHit;channel;Hit",64,0,64);
 
-	TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;time;Hit",200,0,200);
-	TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;time;Hit",200,0,200);
-	TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;time;Hit",200,0,200);
-	TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;time;Hit",200,0,200);
+	TH1D* TimeDist1 = new TH1D("TimeDist1" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist2 = new TH1D("TimeDist2" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist3 = new TH1D("TimeDist3" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist4 = new TH1D("TimeDist4" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",200,0,200);
 
 
-	TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;time;Hit",200,0,200);
-	TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;time;Hit",200,0,200);
-	TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;time;Hit",200,0,200);
-	TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;time;Hit",200,0,200);
+	TH1D* TimeDist11 = new TH1D("TimeDist11" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist21 = new TH1D("TimeDist21" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist31 = new TH1D("TimeDist31" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist41 = new TH1D("TimeDist41" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",200,0,200);
 
 	TH1D* TimeDist1Ch[64];
 	TH1D* TimeDist2Ch[64];
@@ -384,17 +388,17 @@ void bdcTimeDist_Data(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int
 	TH1D* TimeDist4Ch[64];
 
 	for (int i=0;i<64;i++) {
-		TimeDist1Ch[i] = new TH1D(Form("TimeDist1Ch%d",i),Form("TimeDist1Ch%d;time;Hit",i),200,0,200);
-		TimeDist2Ch[i] = new TH1D(Form("TimeDist2Ch%d",i),Form("TimeDist2Ch%d;time;Hit",i),200,0,200);
-		TimeDist3Ch[i] = new TH1D(Form("TimeDist3Ch%d",i),Form("TimeDist3Ch%d;time;Hit",i),200,0,200);
-		TimeDist4Ch[i] = new TH1D(Form("TimeDist4Ch%d",i),Form("TimeDist4Ch%d;time;Hit",i),200,0,200);
+		TimeDist1Ch[i] = new TH1D(Form("TimeDist1Ch%d",i),Form("TimeDist1Ch%d;TDC Time (ns);Number of TDC hits/event",i),200,0,200);
+		TimeDist2Ch[i] = new TH1D(Form("TimeDist2Ch%d",i),Form("TimeDist2Ch%d;TDC Time (ns);Number of TDC hits/event",i),200,0,200);
+		TimeDist3Ch[i] = new TH1D(Form("TimeDist3Ch%d",i),Form("TimeDist3Ch%d;TDC Time (ns);Number of TDC hits/event",i),200,0,200);
+		TimeDist4Ch[i] = new TH1D(Form("TimeDist4Ch%d",i),Form("TimeDist4Ch%d;TDC Time (ns);Number of TDC hits/event",i),200,0,200);
 	}
 
 
-	TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;time;Hit",200,0,200);
-	TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;time;Hit",200,0,200);
-	TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;time;Hit",200,0,200);
-	TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;time;Hit",200,0,200);
+	TH1D* TimeDist12 = new TH1D("TimeDist12" ,"TimeDist1;TDC Time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist22 = new TH1D("TimeDist22" ,"TimeDist2;TDC Time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist32 = new TH1D("TimeDist32" ,"TimeDist3;TDC Time (ns);Number of TDC hits/event",200,0,200);
+	TH1D* TimeDist42 = new TH1D("TimeDist42" ,"TimeDist4;TDC Time (ns);Number of TDC hits/event",200,0,200);
 
 	TH1D* TimeMax11 = new TH1D("TimeMax11",";time;Counts",500,0,500);
 	TH1D* TimeMax21 = new TH1D("TimeMax21",";time;Counts",500,0,500);
@@ -1038,7 +1042,7 @@ void bdcTimeDist_Data(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int
 			if(num2 > 2.5) num2 = 2.5;
 			//cout<<"X : "<<nbin<<", num1 : "<<num1<<endl;
 			//cout<<"Y : "<<nbin<<", num2 : "<<num2<<endl;
-			//TimeInt1[i]->SetBinContent(nbin,num1);
+			TimeInt1[i]->SetBinContent(nbin,num1);
 			TimeInt2[i]->SetBinContent(nbin,num2);
 		}
 	}
@@ -1171,7 +1175,7 @@ void bdcTimeDist_Data(int locano=2, int minip=-1, int maxip=10, int tdopt=1, int
 		TimeInt1[3]=(TH1D*)TimeInt1Ch[3][ltch-1]->Clone();
 		std::cout << "lt function (decided) : v2ch - " << ltch << std::endl; 
 	}
-	else {//ltopt=0
+	else if (ltopt==0) {//ltopt=0
 		if (minchis<=minchis2) {
 			TimeInt1[0]=(TH1D*)TimeInt1Ch[0][v1ch]->Clone();
 			TimeInt1[1]=(TH1D*)TimeInt1Ch[1][v1ch+1]->Clone();

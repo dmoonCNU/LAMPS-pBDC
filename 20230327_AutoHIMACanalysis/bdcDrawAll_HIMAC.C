@@ -33,10 +33,11 @@ void set_plot_style()
 }
 
 //void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=0){
-void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
+//void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 
+void bdcDrawAll_HIMAC(int locano=___LOCANO___, int RunNo=___RUNNUMBER___, int QDCopt=___QDCOPT___, int maxip=___MAXIP___, int minip=___MINIP___){
 
-
+//sed -i '.bak' -e "s,___LOCA___,$loca,g" -e "s,___RUNNUMBER___,$RunNumber,g" -e "s,___LOCANO___,$locano,g" *.C -e "s,___QDCOPT___,$QDCopt,g" -e "s,___T0OPT___,$t0opt,g" -e "s,___TDOPT___,$tdopt,g" -e "s,___HITOPT___,$hitopt,g" -e "s,___CHOPT___,$chopt,g" -e "s,___CENTOPT___,$centopt,g" -e "s,___PEDOPT___,$pedopt,g" *.C -e "s,___MINIP___,$minip,g" -e "s,___MAXIP___,$maxip,g" -e "s,___SAVEPNG___,$savepng,g" -e "s,___CORR___,$corr_,g" -e "s,___NSIGMA___,$nsigma,g" -e "s,___ANGLECUT___,$angleCut_,g" -e "s,___MINANG___,$minang,g" -e "s,___MAXANG___,$maxang,g" -e "s,___LTOPT___,$ltopt,g" -e "s,___LTCH___,$ltch,g" -e "s,___RMK___,$rmk,g" *.C
 
 	gROOT->Macro("~/rootlogon.C");
 	gStyle->SetOptStat(0);
@@ -90,23 +91,31 @@ void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 		itr->SetBranchAddress("eNum"      ,&eNum      );
 		itr->SetBranchAddress("sNum"      ,&sNum      );
 
-		TCanvas* can = new TCanvas("can","can",0,66,1400,700);
+		//TCanvas* can = new TCanvas("can","can",0,66,1400,700);
 		//TCanvas* can = new TCanvas("can","can",0,66,1000,600);
-		can->Divide(4,2);
+		//can->Divide(4,2);
+		TCanvas* can = new TCanvas("can","can",0,66,1650,700);
+		can->Divide(5,2);
 
-		TH2D* hisQDC1= new TH2D("hisQDC1","hisQDC1;time;QDC",10,0,10,800,0,800);
-		TH2D* hisQDC2= new TH2D("hisQDC2","hisQDC2;time;QDC",10,0,10,800,0,800);
+		TH2D* hisQDC1= new TH2D("hisQDC1","hisQDC1;IP (~32 ns);QDC",10,0,10,800,0,800);
+		TH2D* hisQDC2= new TH2D("hisQDC2","hisQDC2;IP (~32 ns);QDC",10,0,10,800,0,800);
+
 		TH1D* hisTDC1 = new TH1D("hisTDC1" ,"hisTDC1;channel;TDC Hit",64,0,64);
 		TH1D* hisTDC2 = new TH1D("hisTDC2" ,"hisTDC2;channel;TDC Hit",64,0,64);
 
-		TH2D* hNHitsCh1 = new TH2D("hNHitsCh1",";channel;# of hits",64,0,64,100,0,1000);
-		TH2D* hNHitsCh2 = new TH2D("hNHitsCh2",";channel;# of hits",64,0,64,10,0,10);
+		TH1D* hisQDCDist1= new TH1D("hisQDCDist1","hisQDCDist1;QDC;Entries",800,0,800);
+		TH1D* hisQDCDist2= new TH1D("hisQDCDist2","hisQDCDist2;QDC;Entries",800,0,800);
 
 		TH1D* hNHits1 = new TH1D("hNHits1",";# of hits;Counts",10,0,10);
 		TH1D* hNHits2 = new TH1D("hNHits2",";# of hits;Counts",10,0,10);
 
 		TH2D* hChXY1 = new TH2D("hChXY1",";X;X'",32,0,32,32,0,32);
 		TH2D* hChXY2 = new TH2D("hChXY2",";X;X'",32,0,32,32,0,32);
+
+		TH2D* hNHitsCh1 = new TH2D("hNHitsCh1",";channel;# of hits",64,0,64,10,0,10);
+		TH2D* hNHitsCh2 = new TH2D("hNHitsCh2",";channel;# of hits",64,0,64,10,0,10);
+
+//////////////////////////////////////////////////////////////////////////////////////
 
 		TH1D* hQDC1 = new TH1D("hQDC1",";QDC;Counts",500,0,1000);
 		TH1D* hIpTime = new TH1D("hIpTime",";ip;Counts",120,0,120);
@@ -120,13 +129,9 @@ void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 
 		TH1D* hQDCPeak11 = new TH1D("hQDCPeak11",";IP;Second peak",2000,0.05,1.05);
 
-		TH1D* hisQDCDist1= new TH1D("hisQDCDist1","hisQDCDist1;QDC;Entries",800,0,800);
-		TH1D* hisQDCDist2= new TH1D("hisQDCDist2","hisQDCDist2;QDC;Entries",800,0,800);
-	
 		for (int i=0;i<10;i++) {
 			hQDCPeak1->SetBinContent(i+1,0);
 			hQDCPeak2->SetBinContent(i+1,0);
-
 		}
 
 		TLatex *lt1 = new TLatex();
@@ -139,16 +144,17 @@ void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 		int nHits2 = 0;
 		int cnt1 = 0;
 		int cnt2 = 0;
-		int ch11 = 0;
-		int ch12 = 0;
-		int ch21 = 0;
-		int ch22 = 0;
+//		int ch11 = 0;
+//		int ch12 = 0;
+//		int ch21 = 0;
+//		int ch22 = 0;
+/*		
 		int minip = 91;
 		int maxip = 94;
 
-		minip = 0;
+		minip = -1;
 		maxip = 10;
-
+*/
 
 		double QDCcut = 320; //460; // 300 : 0800 ASD 16, 360 : 0C00 ASD 16
 							 //double QDCcut = 600; //460; // 300 : 0800 ASD 16, 360 : 0C00 ASD 16
@@ -169,6 +175,11 @@ void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 
 		for( int ievt = 0; ievt < itr->GetEntries(); ievt++){
 			//for( int ievt =19; ievt < 20; ievt++)
+
+			int ch11[32]={0};
+			int ch12[32]={0};
+			int ch21[32]={0};
+			int ch22[32]={0};
 
 			bool passed = false;
 			itr->GetEntry(ievt);
@@ -193,75 +204,78 @@ void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 
 				for( int ip = 0; ip < nPoints; ip++){
 					double tmpQDC=Data[ip*128+ich];
-					//if(!(tmpQDC > 330)) continue;
+					//					if(!(ip > minip && ip < maxip)) continue;
+					//					if (!( Data[ip*128+64+ich] > 0)) continue;
 
+					//if(!(tmpQDC > 330)) continue;
 					//					if ( Data[ip*128+64+ich] > 0) hisQDC1->Fill(ip,tmpQDC);
+
+					// Nocut option Pad 1-5
 					if (QDCopt==1) {hisQDC1->Fill(ip,tmpQDC);hisQDCDist1->Fill(tmpQDC);}
 					else if (QDCopt==2) {
 						if ( Data[ip*128+64+ich] > 0) {hisQDC1->Fill(ip,tmpQDC);hisQDCDist1->Fill(tmpQDC);}
 					}
 					if ( Data[ip*128+64+ich] > 0) {
-						hQDC1->Fill(tmpQDC);
-						if(tmpQDC > QDCcut) hIpTime->Fill(ip);
-						if(tmpQDC > QDCcut) hIpTimeQDC2->Fill(ip,tmpQDC);
-						//if(tmpQDC > QDCcut) hIpTimeQDC->SetBinContent(ip,tmpQDC);
-						if(tmpQDC> 0) hisTDC1->Fill( ich );
+						hisTDC1->Fill( ich );
 						if(ich < 32){
 							if (QDCPeak1Ch[ASDNo]-2<=ich && ich<=QDCPeak1Ch[ASDNo]+2) isTDC1=true;
-
-							ch11 = ich;
+							ch11[ich]=1;
 						}else{
 							if (QDCPeak2Ch[ASDNo]-2<=ich && ich<=QDCPeak2Ch[ASDNo]+2) isTDC2=true;
-
-							ch12 = ich-31;
-
+							ch12[ich-31]=1;
 						} 
-						if ((ievt-lastTDC1)<=10) lastTDC1=ievt;
-						isFired1=true;
 						cnt1++;
 					}
 
-					if (tmpQDC > QDCcut){ 
-						//if(tmpQDC > QDCMax) continue;
-						if(!(ip > minip && ip < maxip)) continue;
 
-						if (Data[ip*128+64+ich] > 0) { // when TDC exists
+					//cut option Pad 6-10
 
-							hisQDC2->Fill(ip,tmpQDC);
-							if(Data[ip*128+64+ich] > 0 ) {
-								if(ich < 32){
-									ch21 = ich;
-									if (ich==QDCPeak1Ch[ASDNo]) {
-										if (!(QDCPeak1done)) {
-											QDCPeak1++;
-											for (int ipk=0;ipk<nPoints;ipk++){
-												double tmpQDC2=Data[ipk*128+ich];
-												hQDCPeak1->SetBinContent(ipk+1,(tmpQDC2+hQDCPeak1->GetBinContent(ipk+1)*(QDCPeak1-1))/QDCPeak1);
-												//###if (QDCPeak1<5) std::cout << ievt << " : " << QDCPeak1 << " - " << ipk << " - " << tmpQDC2 << " - " << hQDCPeak1->GetBinContent(ipk+1) << std::endl;
-											}
-											QDCPeak1done=true;
-										}
-									}
-								}else{
-									ch22 = ich-31;
-									if (ich==QDCPeak2Ch[ASDNo]) {
-										if (!(QDCPeak2done)) {
-											QDCPeak2++;
-											for (int ipk=0;ipk<nPoints;ipk++){
-												double tmpQDC2=Data[ipk*128+ich];
-												//hQDCPeak2->SetBinContent(ipk+1,(tmpQDC2+hQDCPeak2->GetBinContent(ipk+1)*(QDCPeak2-1))/QDCPeak2);
-												//	if (QDCPeak2<5) std::cout << QDCPeak2 << " - " << ipk << " - " << tmpQDC2 << " - " << hQDCPeak2->GetBinContent(ipk+1) << std::endl;
-											}
-											QDCPeak2done=true;
-										}
-									}
-								} 
-								hisTDC2->Fill( ich );
-								isFired=true;
-								cnt2++;
-							}//TDC>0
-						}//TDC>0
-					}//QDCcut
+					if(!(ip > minip && ip < maxip)) continue;
+					if (!( Data[ip*128+64+ich] > 0)) continue;
+					//if(!(tmpQDC > 330)) continue;
+					if (!(tmpQDC > QDCcut)) continue;
+
+
+					hisTDC1->Fill( ich );
+					hisQDCDist2->Fill(tmpQDC);
+					hQDC1->Fill(tmpQDC);
+					hIpTime->Fill(ip);
+					hIpTimeQDC2->Fill(ip,tmpQDC);
+					if ((ievt-lastTDC1)<=10) lastTDC1=ievt;
+					isFired1=true;
+
+					hisQDC2->Fill(ip,tmpQDC);
+					if(ich < 32){
+						ch21[ich]=1;
+						if (ich==QDCPeak1Ch[ASDNo]) {
+							if (!(QDCPeak1done)) {
+								QDCPeak1++;
+								for (int ipk=0;ipk<nPoints;ipk++){
+									double tmpQDC2=Data[ipk*128+ich];
+									hQDCPeak1->SetBinContent(ipk+1,(tmpQDC2+hQDCPeak1->GetBinContent(ipk+1)*(QDCPeak1-1))/QDCPeak1);
+									//###if (QDCPeak1<5) std::cout << ievt << " : " << QDCPeak1 << " - " << ipk << " - " << tmpQDC2 << " - " << hQDCPeak1->GetBinContent(ipk+1) << std::endl;
+								}
+								QDCPeak1done=true;
+							}
+						}
+					}else{
+						ch22[ich-31]=1;
+						if (ich==QDCPeak2Ch[ASDNo]) {
+							if (!(QDCPeak2done)) {
+								QDCPeak2++;
+								for (int ipk=0;ipk<nPoints;ipk++){
+									double tmpQDC2=Data[ipk*128+ich];
+									//hQDCPeak2->SetBinContent(ipk+1,(tmpQDC2+hQDCPeak2->GetBinContent(ipk+1)*(QDCPeak2-1))/QDCPeak2);
+									//	if (QDCPeak2<5) std::cout << QDCPeak2 << " - " << ipk << " - " << tmpQDC2 << " - " << hQDCPeak2->GetBinContent(ipk+1) << std::endl;
+								}
+								QDCPeak2done=true;
+							}
+						}
+					} 
+					hisTDC2->Fill( ich );
+					isFired=true;
+					cnt2++;
+
 				}//ip
 				if (ich==QDCPeak1Ch[ASDNo] && !QDCPed1done && !isTDC1) {
 					QDCPed1++;
@@ -292,9 +306,25 @@ void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 			if (maxtmp<hisTDC1->GetBinContent(i+1)) {maxtmp=hisTDC1->GetBinContent(i+1);maxch=i;}
 			}
 			 */
+			for (int i=0;i<32;i++) {
+				if (ch11[i]==0) continue;
+				for (int j=0;j<32;j++) {
 
-			hChXY1->Fill(ch11, ch12);
-			hChXY2->Fill(ch21, ch22);
+					if (ch12[j]==0) continue;
+					hChXY1->Fill(i, j);
+				}
+			}
+			for (int i=0;i<32;i++) {
+				if (ch21[i]==0) continue;
+				for (int j=0;j<32;j++) {
+
+					if (ch22[j]==0) continue;
+					hChXY2->Fill(i, j);
+				}
+			}
+
+			//hChXY1->Fill(ch11, ch12);
+			//hChXY2->Fill(ch21, ch22);
 			nHits1=cnt1;
 			nHits2=cnt2;
 			cnt1 = 0;
@@ -305,7 +335,8 @@ void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 			if (isFired1) Eff1++;
 			if (isFired) Eff++;
 			hNHits1->Fill(nHits1);
-			hNHits2->Fill(nHits2);
+			//hNHits2->Fill(nHits2);
+			if (nHits2>0) hNHits2->Fill(nHits2);
 
 			hQDCPeak11->Fill((Data[4*128+(QDCPeak1Ch[ASDNo])]-200)/(Data[6*128+(QDCPeak1Ch[ASDNo])]-200));
 
@@ -330,35 +361,47 @@ void bdcDrawAll_HIMAC(int locano=2, int RunNo=3067, int QDCopt=1){
 		//lt1->DrawLatex(0.2, 0.9, "HV C-1420 A-1420 at ASD 16 DAC : 0800");
 		//lt1->DrawLatex(0.2, 0.9, "HV C-1415 A-1375 at ASD 18");
 
-		can->cd(2);
+				can->cd(2);
+		hisTDC1->Draw("E");
+		lt1->DrawLatex(0.2, 0.17, "After removing pedstal");
+
+		can->cd(3);
 		//hisTDC1->Draw("E");
 		gPad->SetLogy();
 		hisQDCDist1->Draw("e");
 
-		can->cd(3);
+		can->cd(4);
 		hNHits1->Draw("E");
 		lt1->DrawLatex(0.6, 0.80, Form("Mean : %0.2f", hNHits1->GetMean()));
 
-		can->cd(4);
+		can->cd(5);
 		hChXY1->Draw("colz");
 
-		can->cd(5);
+		can->cd(6);
 		gPad->SetLogz();
 		hisQDC2->Draw("colz");
-		lt1->DrawLatex(0.2, 0.17, "After removing pedstal");
-
-		can->cd(6);
-		hisTDC2->Draw("E");
+		//###lt1->DrawLatex(0.2, 0.9, "HV C-1420 A-1380 at ASD 16 DAC : 0C00");
+		//lt1->DrawLatex(0.2, 0.9, "HV C-1420 A-1420 at ASD 16 DAC : 0800");
+		//lt1->DrawLatex(0.2, 0.9, "HV C-1415 A-1375 at ASD 18");
 		lt1->DrawLatex(0.2, 0.17, "After removing pedstal");
 
 		can->cd(7);
-		hNHits2->Draw("E");
-		lt1->DrawLatex(0.4, 0.9, "After removing pedstal");
-		lt1->DrawLatex(0.6, 0.80, Form("Mean : %0.2f", hNHits2->GetMean()));
+		hisTDC2->Draw("E");
+		lt1->DrawLatex(0.2, 0.17, "After removing pedstal");
 
 		can->cd(8);
+		//hisTDC1->Draw("E");
+		gPad->SetLogy();
+		hisQDCDist2->Draw("e");
+
+		can->cd(9);
+		hNHits2->Draw("E");
+		lt1->DrawLatex(0.6, 0.80, Form("Mean : %0.2f", hNHits1->GetMean()));
+
+		can->cd(10);
 		hChXY2->Draw("colz");
 
+		/////////////////////////////////////
 		can->SaveAs(Form("komac_ana_%d_%d.png",RunNo,ASDNo)); 
 		//can->SaveAs("220526_Cosmic_c1430_a1430_0C00_evt30k_t106_ASD19.png");
 		//can->SaveAs("220526_Cosmic_c1430_a1430_0C00_evt30k_t106_ASD18.png");

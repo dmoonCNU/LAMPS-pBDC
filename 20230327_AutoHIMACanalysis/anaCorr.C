@@ -1,4 +1,5 @@
-void anaCorr(double nsigma=1){
+//void anaCorr(double nsigma=1){
+void anaCorr(double nsigma=___NSIGMA___){
     //gROOT->Macro("~/rootlogon.C");
     //###gStyle->SetPalette(kLake);
     gStyle->SetPalette(kRainBow);
@@ -16,6 +17,10 @@ void anaCorr(double nsigma=1){
     TH2F *TimeCorr11 = (TH2F*)in1->Get("TimeCorr11");
     TH2F *TimeCorr21 = (TH2F*)in1->Get("TimeCorr21");
     TH2F *TimeCorr31 = (TH2F*)in1->Get("TimeCorr31");
+
+    TimeCorr11->Rebin(2);
+    TimeCorr21->Rebin(2);
+    TimeCorr31->Rebin(2);
 
 	TFile* fout = new TFile("anaCorr_result.root","RECREATE");
 
@@ -40,7 +45,6 @@ void anaCorr(double nsigma=1){
 
 
 
-    //TimeCorr11->Rebin(2);
 /*
 	TF1 *f1 = new TF1("f1","56-x",-20,110);
     TF1 *f2 = new TF1("f2","78-x",-20,110);
@@ -150,6 +154,11 @@ void anaCorr(double nsigma=1){
     TH2F *TimeCorrR12 = (TH2F*)in1->Get("TimeCorrR21");
     TH2F *TimeCorrR32 = (TH2F*)in1->Get("TimeCorrR31");
 
+	TimeCorrR11->Rebin(2);
+    TimeCorrR12->Rebin(2);
+    TimeCorrR32->Rebin(2);
+
+
     TH1D *hProjX11;
     TH1D *hProjX12;
     TH1D *hProjX32;
@@ -186,8 +195,8 @@ void anaCorr(double nsigma=1){
 	c0->cd(1);
     TimeCorr11->GetXaxis()->SetTitle("time 1 (ns)");
     TimeCorr11->GetYaxis()->SetTitle("time 2 (ns)");
-    TimeCorr11->GetXaxis()->SetRangeUser(0,100);//80
-    TimeCorr11->GetYaxis()->SetRangeUser(0,100);//80
+    TimeCorr11->GetXaxis()->SetRangeUser(0,120);//80
+    TimeCorr11->GetYaxis()->SetRangeUser(0,120);//80
     TimeCorr11->Draw("colz");
     //TimeCorr11->Draw("surf1");
     //TimeCorr11->Draw("surflz");
@@ -234,8 +243,8 @@ void anaCorr(double nsigma=1){
 	c0->cd(2);
 	TimeCorr21->GetXaxis()->SetTitle("time 3 (ns)");
     TimeCorr21->GetYaxis()->SetTitle("time 4 (ns)");
-     TimeCorr21->GetXaxis()->SetRangeUser(0,100);//80
-    TimeCorr21->GetYaxis()->SetRangeUser(0,100);//80
+     TimeCorr21->GetXaxis()->SetRangeUser(0,120);//80
+    TimeCorr21->GetYaxis()->SetRangeUser(0,120);//80
    TimeCorr21->Draw("colz");
     //TimeCorr12->Draw("surf1");
     //TimeCorr12->Draw("surflz");
@@ -277,8 +286,8 @@ void anaCorr(double nsigma=1){
 	c0->cd(3);
     TimeCorr31->GetXaxis()->SetTitle("time 2 (ns)");
     TimeCorr31->GetYaxis()->SetTitle("time 3 (ns)");
-      TimeCorr31->GetXaxis()->SetRangeUser(0,100);//80
-    TimeCorr31->GetYaxis()->SetRangeUser(0,100);//80
+      TimeCorr31->GetXaxis()->SetRangeUser(0,120);//80
+    TimeCorr31->GetYaxis()->SetRangeUser(0,120);//80
     TimeCorr31->Draw("colz");
     //TimeCorr12->Draw("surf1");
     //TimeCorr12->Draw("surflz");

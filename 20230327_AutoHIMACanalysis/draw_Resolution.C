@@ -18,13 +18,15 @@ void draw_Resolution(){
 
     TCanvas *b1 = new TCanvas("b1","",880, 800);
     b1->cd();
-//    hAllX1->Rebin(4);
+    hAllX1->Rebin(4);
     hAllX1->SetMarkerSize(1.2);
     hAllX1->Draw();
  
 //    TF1 *gausa = new TF1("gausa","gaus",-0.2,0.2);
 //    TF1 *gausa = new TF1("gausa","gaus",-0.8,0.8);
-    TF1 *gausa = new TF1("gausa","gaus",-0.12,0.12);
+    //TF1 *gausa = new TF1("gausa","gaus",-0.12,0.12);
+    TF1 *gausa = new TF1("gausa","gaus",-0.20,0.20);
+
 
 
 
@@ -45,13 +47,13 @@ void draw_Resolution(){
     TH1F *hDisX_3 = (TH1F*)in1->Get("hDisX_3");
     TH1F *hResDisX = (TH1F*)in1->Get("hDisX2_2");
 
-/*
+
     hDisX_0->Rebin(4);
     hDisX_1->Rebin(4);
     hDisX_2->Rebin(4);
     hResDisX->Rebin(8);
     hDisX_3->Rebin(4);
-*/
+
     TH1F *hDisY_0 = (TH1F*)in1->Get("hDisY_0");
     TH1F *hDisY_1 = (TH1F*)in1->Get("hDisY_1");
     TH1F *hDisY_2 = (TH1F*)in1->Get("hDisY_2");
